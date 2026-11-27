@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro';
+import {temas,bloques} from '../data/temas';
+---
+<Base title="CSS Esencial">
+  <h1>CSS Esencial</h1><p class="lead">Aprende a diseñar y maquetar páginas web desde cero.</p>
+  <figure class="infographic"><img src="/images/cssIntro.jpeg" alt="Aprendiendo CSS: HTML estructura el contenido, CSS define el diseño y permite adaptarlo a distintos dispositivos." width="2000" height="1116" /></figure>
+  <p><a href="/primeros-pasos/">Comenzar por el Tema 1</a></p>
+  {bloques.map(b => <section><h2>{b}</h2><ol>{temas.filter(t => t.b === b).map(t => <li><a href={t.h}>Tema {t.n}. {t.t}</a></li>)}</ol></section>)}
+  <section class="practice"><h2>Cómo estudiar</h2><ol><li>Lee el concepto.</li><li>Observa el ejemplo.</li><li>Experimenta con el código.</li><li>Realiza la práctica.</li><li>Comprueba lo aprendido.</li></ol></section>
+</Base>

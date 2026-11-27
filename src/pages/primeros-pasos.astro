@@ -1,0 +1,52 @@
+---
+import Lesson from '../components/Lesson.astro';
+
+const q = [
+  ['¿Qué elemento enlaza una hoja CSS externa?', ['style', 'link', 'script', 'img'], 1, 'link conecta el documento HTML con el archivo CSS.'],
+  ['¿Qué selector elige elementos de una clase?', ['#destacado', '.destacado', 'destacado', '*'], 1, 'El punto identifica un selector de clase.'],
+  ['¿Cuál de estos selectores es normalmente más específico?', ['p', '.destacado', '#cabecera', '*'], 2, 'Un selector de ID tiene mayor especificidad que los selectores de clase, etiqueta y universal.'],
+  ['¿Qué parte de una regla indica qué elementos reciben el estilo?', ['El valor', 'El selector', 'El punto y coma', 'La propiedad'], 1, 'El selector elige los elementos a los que se aplica la regla.'],
+  ['¿Qué opción suele organizar mejor los estilos de un proyecto?', ['CSS externo', 'Solo estilos en línea', 'Sin CSS', 'Una imagen'], 0, 'Una hoja externa se puede reutilizar y ayuda a organizar el proyecto.'],
+];
+---
+
+<Lesson
+  n={1}
+  title="Primeros pasos con CSS"
+  lead="HTML estructura el contenido; CSS controla su estilo y diseño."
+  objectives={['Conocer las tres formas de conectar CSS y HTML', 'Reconocer selectores y su especificidad', 'Identificar las partes de una regla CSS']}
+  html={'<h1 id="cabecera">Mi página</h1>\n<p class="destacado">Hola CSS</p>'}
+  css={'* { margin: 0; }\n#cabecera { background: lightgray; }\n.destacado { color: orange; }\np { font-size: 18px; }'}
+  practice="Crea index.html y estilos.css. Añade <link rel=&quot;stylesheet&quot; href=&quot;estilos.css&quot;> dentro del head, aplica una clase a un párrafo y escribe una regla para cambiar su color."
+  summary={[
+    ['CSS en línea', 'Estilo en el atributo style de una etiqueta', '<p style="color: blue;">Hola</p>'],
+    ['CSS interno', 'Estilos en una etiqueta style dentro de head', '<style>p { color: blue; }</style>'],
+    ['CSS externo', 'Archivo independiente enlazado desde head', '<link rel="stylesheet" href="estilos.css">'],
+    ['*', 'Selector universal', '* { margin: 0; }'],
+    ['p', 'Selector de etiqueta', 'p { color: green; }'],
+    ['.destacado', 'Selector de clase', '.destacado { color: orange; }'],
+    ['#cabecera', 'Selector de ID', '#cabecera { background: lightgray; }'],
+    ['selector { propiedad: valor; }', 'Estructura de una regla CSS', 'p { color: blue; }'],
+  ]}
+  questions={q}
+  image={{src:'/images/conexionCssyHtml.png',alt:'Guía de CSS y HTML: formas de conexión, selectores, especificidad y estructura de una regla CSS',caption:'CSS y HTML: guía básica'}}
+>
+  <Fragment slot="concepto">
+    <h3>Cómo conectar CSS con HTML</h3>
+    <p>Hay tres formas de aplicar estilos:</p>
+    <ul>
+      <li><strong>En línea:</strong> con el atributo <code>style</code> de una etiqueta.</li>
+      <li><strong>CSS interno:</strong> dentro de una etiqueta <code>style</code> en el <code>head</code>.</li>
+      <li><strong>CSS externo:</strong> en un archivo <code>.css</code> enlazado desde el <code>head</code> con <code>link</code>.</li>
+    </ul>
+    <p>El CSS externo suele ser la opción más recomendable para organizar y reutilizar estilos.</p>
+
+    <h3>Selectores y prioridad</h3>
+    <p>Los selectores indican qué elementos reciben los estilos. Pueden ser universales (<code>*</code>), de etiqueta (<code>p</code>), de clase (<code>.destacado</code>) o de ID (<code>#cabecera</code>).</p>
+    <p>Cuando varias reglas compiten, normalmente tienen prioridad, de mayor a menor, el estilo en línea, el ID, la clase y la etiqueta. El selector universal no añade especificidad. La cascada también considera otros factores, como <code>!important</code> y el orden de las reglas.</p>
+
+    <h3>La estructura de una regla</h3>
+    <p>Una regla comienza con un selector, seguido de un bloque entre llaves. Dentro se escriben declaraciones con una propiedad y un valor separados por dos puntos; cada declaración suele terminar en punto y coma.</p>
+    <pre><code>p {'{'} color: blue; {'}'}</code></pre>
+  </Fragment>
+</Lesson>

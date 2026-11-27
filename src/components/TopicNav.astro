@@ -1,0 +1,11 @@
+---
+import { temas } from '../data/temas';
+const { n } = Astro.props;
+const i = temas.findIndex((tema) => tema.n === n);
+const previous = i > 0 ? temas[i - 1] : null;
+const next = i < temas.length - 1 ? temas[i + 1] : null;
+---
+<nav class="topic-nav" aria-label="Lecciones">
+  {previous ? <a href={previous.h}>← Tema {previous.n}</a> : <span />}
+  {next ? <a href={next.h}>Tema {next.n} →</a> : <span />}
+</nav>

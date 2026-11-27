@@ -1,0 +1,50 @@
+---
+import Lesson from '../components/Lesson.astro';
+
+const q = [
+  ['¿Qué propiedad cambia el color del texto?', ['color', 'background-color', 'border', 'display'], 0, 'color modifica el color del texto.'],
+  ['¿Qué propiedad controla el espacio interior de una caja?', ['margin', 'padding', 'width', 'display'], 1, 'padding separa el contenido del borde.'],
+  ['¿Qué propiedad controla la altura entre líneas?', ['line-height', 'margin-left', 'font-style', 'border'], 0, 'line-height controla la altura de las líneas de texto.'],
+  ['¿Qué valor oculta un elemento?', ['display: block', 'display: inline', 'display: none', 'display: flex'], 2, 'display: none oculta el elemento y lo retira del flujo.'],
+  ['¿A qué se refiere la unidad rem?', ['Al tamaño de letra raíz', 'Al ancho de la pantalla', 'Al color de fondo', 'Al borde de la caja'], 0, 'rem es relativa al tamaño de letra del elemento raíz.'],
+];
+---
+
+<Lesson
+  n={4}
+  title="Colores, fondos y texto"
+  lead="Conoce las propiedades y los valores esenciales para empezar a dar estilo a una página."
+  objectives={['Aplicar colores, fondos y tipografía', 'Reconocer las propiedades de caja y bordes', 'Usar medidas y propiedades básicas de visualización']}
+  concept="Una regla CSS tiene un selector y un bloque de declaraciones: cada declaración combina una propiedad y un valor. Usa color para el texto y background-color o background-image para el fondo; background-size y background-repeat controlan la imagen de fondo. Las propiedades font-family, font-size, font-weight, font-style, text-align, line-height y text-decoration dan forma al texto. El modelo de caja comprende contenido, padding, borde y margin; width, max-width, height y box-sizing controlan sus dimensiones. También puedes definir bordes, mostrar u ocultar elementos, cambiar las viñetas de una lista y unir los bordes de las celdas de una tabla. Entre las unidades habituales están px, %, relativa según la propiedad a una medida de referencia, y rem, relativa al tamaño de letra raíz."
+  html={'<h1>Curso de CSS</h1>\n<p class="tarjeta">Aprende con ejemplos.</p>'}
+  css={'h1 { color: #174b70; font-family: Arial, sans-serif; }\n.tarjeta { background-color: #f5f5f5; max-width: 100%; padding: 10px; border: 2px solid #174b70; border-radius: 8px; line-height: 1.5; }'}
+  practice="Crea una tarjeta con un color de fondo, espacio interior y bordes redondeados. Cambia la tipografía y comprueba que el texto tenga buen contraste."
+  summary={[
+    ['color', 'Color del texto', 'color: blue;'],
+    ['background-color', 'Color de fondo', 'background-color: #f5f5f5;'],
+    ['background-image', 'Imagen de fondo', "background-image: url('foto.jpg');"],
+    ['background-size', 'Tamaño de la imagen de fondo', 'background-size: cover;'],
+    ['background-repeat', 'Repetición de la imagen de fondo', 'background-repeat: no-repeat;'],
+    ['font-family', 'Tipo de letra', 'font-family: Arial, sans-serif;'],
+    ['font-size', 'Tamaño de letra', 'font-size: 16px;'],
+    ['font-weight', 'Grosor de letra', 'font-weight: bold;'],
+    ['font-style', 'Estilo de letra', 'font-style: italic;'],
+    ['text-align', 'Alineación del texto', 'text-align: center;'],
+    ['line-height', 'Altura de línea', 'line-height: 1.5;'],
+    ['text-decoration', 'Decoración del texto', 'text-decoration: underline;'],
+    ['width', 'Ancho del elemento', 'width: 300px;'],
+    ['max-width', 'Ancho máximo', 'max-width: 100%;'],
+    ['height', 'Alto del elemento', 'height: auto;'],
+    ['margin', 'Espacio exterior', 'margin: 20px;'],
+    ['padding', 'Espacio interior', 'padding: 10px;'],
+    ['box-sizing', 'Cómo se calculan las dimensiones', 'box-sizing: border-box;'],
+    ['border', 'Grosor, estilo y color del borde', 'border: 2px solid black;'],
+    ['border-radius', 'Redondeo de las esquinas', 'border-radius: 8px;'],
+    ['display', 'Cómo se muestra u oculta un elemento', 'display: block;'],
+    ['list-style-type', 'Tipo de viñeta en las listas', 'list-style-type: disc;'],
+    ['border-collapse', 'Unión de bordes de las celdas', 'border-collapse: collapse;'],
+    ['px, %, rem', 'Unidades de medida', '16px; 100%; 1rem'],
+  ]}
+  questions={q}
+  image={{src:'/images/cssesencial.png',alt:'Propiedades y valores CSS esenciales: colores, fondos, tipografía, modelo de caja, medidas, bordes, listas y tablas',caption:'CSS esencial: propiedades y valores para empezar'}}
+/>

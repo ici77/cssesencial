@@ -1,0 +1,4 @@
+---
+const {src,alt,caption}=Astro.props;
+---
+<figure class="infographic"><a href={src} target="_blank" rel="noopener"><img src={src} alt={alt} loading="lazy" /></a><figcaption>{caption}. <a href={src} target="_blank" rel="noopener">Ampliar</a></figcaption></figure>
