@@ -1,47 +1,1953 @@
+
 ---
 import Base from '../layouts/Base.astro';
 import InfoGraphic from '../components/InfoGraphic.astro';
 import TopicNav from '../components/TopicNav.astro';
 ---
-<Base title="Tema 2 · Selectores básicos">
-  <header class="lesson-header"><p class="eyebrow">Tema 2 · CSS Esencial</p><h1>Selectores básicos y pseudoclases</h1><p class="lead">Los selectores encuentran elementos HTML. Las pseudoclases permiten encontrarlos también por su estado, posición o condición, sin modificar el HTML.</p></header>
-  <nav class="lesson-index" aria-label="Apartados"><strong>En esta lección</strong><a href="#basicos">Selectores básicos</a><a href="#pseudo">Pseudoclases</a><a href="#enlaces">Enlaces</a><a href="#posicion">Posición</a><a href="#formularios">Formularios</a><a href="#comparacion">Clase o pseudoclase</a></nav>
-  <section class="objectives"><h2>Qué vas a aprender</h2><ul><li>Elegir entre etiqueta, clase e identificador.</li><li>Entender qué significa una pseudoclase.</li><li>Aplicar estados, posiciones y condiciones sin añadir clases.</li><li>Reconocer la diferencia entre <code>:</code> y <code>::</code>.</li></ul></section>
-  <section id="basicos"><h2>1. Antes de las pseudoclases: seleccionar elementos</h2><p>Un selector de etiqueta, como <code>p</code>, encuentra todos los párrafos. Una clase, como <code>.aviso</code>, encuentra los elementos a los que tú has añadido <code>class="aviso"</code>. Un ID, como <code>#cabecera</code>, identifica una única zona. Una clase se puede reutilizar; un ID no debe repetirse.</p><p>También puedes agrupar alternativas con coma: <code>h1, h2</code>. Un selector compuesto como <code>p.aviso</code> pide las dos condiciones en el mismo elemento; <code>nav a</code> busca enlaces que viven dentro de una navegación.</p></section>
-  <section class="example basic-selectors"><h2>2. Selectores básicos: ejemplos y resultados</h2><p>Antes de usar condiciones automáticas, practica los selectores que dependen de la estructura que escribes en HTML.</p><div class="code-grid"><div><h3>HTML</h3><pre><code>&lt;p&gt;Párrafo normal&lt;/p&gt;
-&lt;p class="aviso"&gt;Párrafo importante&lt;/p&gt;
-&lt;div id="cabecera"&gt;Zona única&lt;/div&gt;</code></pre></div><div><h3>CSS</h3><pre><code>p &#123; color: #272332; &#125;
-.aviso &#123; background: #fceaf3; &#125;
-#cabecera &#123; color: #6d3fa9; &#125;
-* &#123; box-sizing: border-box; &#125;</code></pre></div></div><div class="result selector-result"><p>Párrafo normal</p><p class="aviso">Párrafo importante</p><div id="selector-cabecera">Zona única</div><p>La etiqueta afecta a ambos párrafos; la clase solo al aviso; el identificador solo a la zona con ese ID. El selector universal se usa con moderación para normas generales.</p></div><h3>Coma, compuesto y descendiente</h3><p><code>h1, h2</code> significa «todos los h1 y todos los h2». <code>p.aviso</code> selecciona un párrafo que además tiene clase aviso. <code>nav a</code> selecciona los enlaces que están dentro de una navegación. Observa que el espacio cambia el significado: las condiciones ya no pertenecen al mismo elemento.</p><aside class="key"><strong>Prueba tú.</strong> Añade <code>class="aviso urgente"</code> a un párrafo. Un mismo elemento puede recibir varias clases; CSS puede seleccionar <code>.aviso.urgente</code> cuando necesites que ambas coincidan.</aside></section>
-  <section id="pseudo"><h2>3. ¿Qué es una pseudoclase?</h2><p>Una pseudoclase es una condición que CSS puede reconocer por sí mismo. No necesitas escribir una clase adicional en HTML. Por ejemplo, un enlace puede estar sin visitar, visitado, bajo el puntero o activo; una celda puede ser la última de su fila; una casilla puede estar marcada.</p><pre><code>selector:pseudoclase &#123;
+
+<Base title="Tema 2 · Selectores CSS">
+
+  <!-- CABECERA DEL TEMA -->
+  <header class="lesson-header">
+    <p class="eyebrow">Tema 2 · CSS Esencial</p>
+    <h1>Selectores CSS</h1>
+    <p class="lead">
+      Aprende a seleccionar los elementos HTML a los que quieres
+      aplicar estilos y descubre cómo CSS permite seleccionarlos
+      también según su estado, posición o condición.
+    </p>
+  </header>
+
+  <!-- ÍNDICE -->
+  <nav class="lesson-index" aria-label="Apartados">
+    <strong>En esta lección</strong>
+    <a href="#selectores-basicos">Parte I. Selectores básicos</a>
+    <a href="#etiqueta">Selector de etiqueta</a>
+    <a href="#clase">Selector de clase</a>
+    <a href="#identificador">Selector de ID</a>
+    <a href="#universal">Selector universal</a>
+    <a href="#combinaciones">Combinación de selectores</a>
+    <a href="#pseudoclases">Parte II. Pseudoclases</a>
+    <a href="#enlaces">Estados de los enlaces</a>
+    <a href="#posicion">Posición de los elementos</a>
+    <a href="#formularios">Formularios</a>
+    <a href="#comparacion">Clase y pseudoclase</a>
+    <a href="#practica">Actividades prácticas</a>
+  </nav>
+
+  <!-- OBJETIVOS -->
+  <section class="objectives">
+    <h2>Qué vas a aprender</h2>
+    <ul>
+      <li>Comprender qué es un selector CSS.</li>
+      <li>Diferenciar los selectores de etiqueta, clase e ID.</li>
+      <li>Seleccionar varios elementos mediante una misma regla.</li>
+      <li>Combinar selectores para conseguir mayor precisión.</li>
+      <li>Aplicar estilos según el estado o posición de un elemento.</li>
+      <li>Comprender y utilizar las principales pseudoclases.</li>
+    </ul>
+  </section>
+
+  <!-- ===================================== -->
+  <!-- PARTE I. SELECTORES BÁSICOS           -->
+  <!-- ===================================== -->
+
+  <section id="selectores-basicos" class="part-heading">
+    <span class="part-label">PARTE I</span>
+    <h2>Selectores básicos</h2>
+    <p>
+      Antes de aplicar estilos a una página web, necesitamos
+      indicar a CSS qué elementos HTML queremos modificar.
+    </p>
+  </section>
+
+  <section id="introduccion">
+    <h2>1. ¿Qué es un selector CSS?</h2>
+
+    <p>
+      Un selector es la parte de una regla CSS que indica a qué
+      elementos HTML se aplicarán las propiedades y valores
+      que aparecen entre las llaves.
+    </p>
+
+    <p>
+      Por ejemplo, si queremos que todos los párrafos de una
+      página tengan el texto de color azul, utilizamos la
+      etiqueta <code>p</code> como selector.
+    </p>
+
+    <pre><code>p &#123;
+  color: blue;
+&#125;</code></pre>
+
+    <div class="syntax-explanation">
+      <div>
+        <code>p</code>
+        <strong>Selector</strong>
+        <p>Indica qué elemento queremos modificar.</p>
+      </div>
+
+      <div>
+        <code>color</code>
+        <strong>Propiedad</strong>
+        <p>Indica qué característica queremos cambiar.</p>
+      </div>
+
+      <div>
+        <code>blue</code>
+        <strong>Valor</strong>
+        <p>Indica cómo queremos modificarla.</p>
+      </div>
+    </div>
+
+    <aside class="key">
+      <strong>Idea fundamental.</strong>
+      El selector responde a la pregunta:
+      ¿a qué elementos HTML quiero aplicar estos estilos?
+    </aside>
+
+    <InfoGraphic
+      src="/images/selectores.png"
+      alt="Infografía de los principales selectores CSS"
+      caption="Selectores básicos de CSS: guía visual"
+    />
+  </section>
+
+  <!-- SELECTOR DE ETIQUETA -->
+  <section id="etiqueta">
+    <h2>2. Selector de etiqueta</h2>
+
+    <p>
+      El selector de etiqueta utiliza directamente el nombre
+      de una etiqueta HTML. Permite aplicar un mismo estilo
+      a todos los elementos de ese tipo.
+    </p>
+
+    <p>
+      Por ejemplo, podemos cambiar el color de todos los
+      párrafos, el tamaño de todos los títulos o el fondo
+      de todas las celdas de una tabla.
+    </p>
+
+    <div class="example">
+      <div class="code-grid">
+
+        <div>
+          <h3>HTML</h3>
+          <pre><code>&lt;p&gt;Primer párrafo&lt;/p&gt;
+&lt;p&gt;Segundo párrafo&lt;/p&gt;
+&lt;p&gt;Tercer párrafo&lt;/p&gt;</code></pre>
+        </div>
+
+        <div>
+          <h3>CSS</h3>
+          <pre><code>p &#123;
+  color: blue;
+&#125;</code></pre>
+        </div>
+
+      </div>
+
+      <div class="result tag-demo">
+        <h3>Resultado</h3>
+        <p>Primer párrafo</p>
+        <p>Segundo párrafo</p>
+        <p>Tercer párrafo</p>
+      </div>
+    </div>
+
+    <p>
+      Observa que no hemos añadido ningún atributo al HTML.
+      CSS encuentra todos los párrafos por el nombre de
+      su etiqueta.
+    </p>
+
+    <details class="extra-example">
+      <summary>Ver más ejemplos de selectores de etiqueta</summary>
+      <pre><code>h1 &#123;
+  color: darkblue;
+&#125;
+
+li &#123;
+  color: green;
+&#125;
+
+td &#123;
+  border: 1px solid black;
+&#125;</code></pre>
+
+      <p>
+        La primera regla afecta a todos los títulos h1,
+        la segunda a los elementos de lista y la tercera
+        a las celdas de datos de las tablas.
+      </p>
+    </details>
+  </section>
+
+  <!-- SELECTOR DE CLASE -->
+  <section id="clase">
+    <h2>3. Selector de clase</h2>
+
+    <p>
+      No siempre queremos modificar todos los elementos
+      de una misma etiqueta. A veces necesitamos aplicar
+      un estilo únicamente a determinados elementos.
+    </p>
+
+    <p>
+      Para ello utilizamos el atributo <code>class</code>
+      en HTML y escribimos el nombre de la clase precedido
+      de un punto en CSS.
+    </p>
+
+    <div class="example">
+
+      <div class="code-grid">
+        <div>
+          <h3>HTML</h3>
+          <pre><code>&lt;p&gt;Párrafo normal&lt;/p&gt;
+
+&lt;p class="aviso"&gt;
+  Párrafo importante
+&lt;/p&gt;
+
+&lt;p&gt;Otro párrafo normal&lt;/p&gt;</code></pre>
+        </div>
+
+        <div>
+          <h3>CSS</h3>
+          <pre><code>.aviso &#123;
+  background-color: yellow;
+  color: black;
+&#125;</code></pre>
+        </div>
+      </div>
+
+      <div class="result class-demo">
+        <h3>Resultado</h3>
+        <p>Párrafo normal</p>
+        <p class="aviso">Párrafo importante</p>
+        <p>Otro párrafo normal</p>
+      </div>
+
+    </div>
+
+    <p>
+      Solamente cambia el párrafo que tiene asignada
+      la clase <code>aviso</code>.
+    </p>
+
+    <aside class="key">
+      <strong>Recuerda.</strong>
+      En HTML escribimos <code>class="aviso"</code>.
+      En CSS escribimos <code>.aviso</code>.
+      El punto solo se utiliza en el selector CSS.
+    </aside>
+
+    <h3>Una clase se puede reutilizar</h3>
+
+    <p>
+      Una misma clase puede utilizarse en varios elementos,
+      incluso aunque tengan etiquetas HTML diferentes.
+      Esta característica permite reutilizar estilos
+      y evita repetir código CSS.
+    </p>
+
+    <pre><code>&lt;h2 class="aviso"&gt;Atención&lt;/h2&gt;
+
+&lt;p class="aviso"&gt;Información importante&lt;/p&gt;</code></pre>
+
+    <details class="extra-example">
+      <summary>¿Puede un elemento tener varias clases?</summary>
+
+      <p>
+        Sí. Basta con escribir los nombres de las clases
+        separados por espacios dentro del atributo class.
+      </p>
+
+      <div class="code-grid">
+        <div>
+          <h3>HTML</h3>
+          <pre><code>&lt;p class="aviso urgente"&gt;
+  Información urgente
+&lt;/p&gt;</code></pre>
+        </div>
+
+        <div>
+          <h3>CSS</h3>
+          <pre><code>.aviso &#123;
+  background-color: yellow;
+&#125;
+
+.urgente &#123;
+  font-weight: bold;
+&#125;</code></pre>
+        </div>
+      </div>
+
+      <div class="result multiple-class-demo">
+        <p class="aviso urgente">Información urgente</p>
+      </div>
+
+      <p>
+        El párrafo recibe los estilos de ambas clases:
+        fondo amarillo y texto en negrita.
+      </p>
+    </details>
+  </section>
+
+  <!-- SELECTOR ID -->
+  <section id="identificador">
+    <h2>4. Selector de identificador (ID)</h2>
+
+    <p>
+      El selector de identificador permite seleccionar
+      un elemento concreto mediante su atributo
+      <code>id</code>.
+    </p>
+
+    <p>
+      A diferencia de una clase, un identificador debe
+      ser único dentro de un mismo documento HTML.
+    </p>
+
+    <div class="example">
+
+      <div class="code-grid">
+        <div>
+          <h3>HTML</h3>
+          <pre><code>&lt;h2 id="titulo-principal"&gt;
+  Bienvenidos
+&lt;/h2&gt;
+
+&lt;h2&gt;Nuestros servicios&lt;/h2&gt;</code></pre>
+        </div>
+
+        <div>
+          <h3>CSS</h3>
+          <pre><code>#titulo-principal &#123;
+  color: purple;
+&#125;</code></pre>
+        </div>
+      </div>
+
+      <div class="result id-demo">
+        <h3>Resultado</h3>
+        <p id="titulo-principal" class="demo-heading">
+          Bienvenidos
+        </p>
+        <p class="demo-heading">Nuestros servicios</p>
+      </div>
+
+    </div>
+
+    <aside class="key">
+      <strong>Recuerda.</strong>
+      En HTML escribimos <code>id="titulo-principal"</code>.
+      En CSS utilizamos la almohadilla:
+      <code>#titulo-principal</code>.
+    </aside>
+
+    <h3>¿Clase o identificador?</h3>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Característica</th>
+            <th scope="col">Clase</th>
+            <th scope="col">ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Símbolo en CSS</td>
+            <td><code>.</code></td>
+            <td><code>#</code></td>
+          </tr>
+          <tr>
+            <td>Atributo HTML</td>
+            <td><code>class</code></td>
+            <td><code>id</code></td>
+          </tr>
+          <tr>
+            <td>Se puede repetir</td>
+            <td>Sí</td>
+            <td>No, dentro del mismo documento</td>
+          </tr>
+          <tr>
+            <td>Uso habitual</td>
+            <td>Estilos reutilizables</td>
+            <td>Identificar un elemento único</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      Para aplicar estilos, normalmente utilizaremos
+      clases porque son más fáciles de reutilizar.
+    </p>
+  </section>
+
+  <!-- SELECTOR UNIVERSAL -->
+  <section id="universal">
+    <h2>5. Selector universal</h2>
+
+    <p>
+      El selector universal se representa mediante
+      un asterisco (<code>*</code>) y selecciona todos
+      los elementos.
+    </p>
+
+    <pre><code>* &#123;
+  box-sizing: border-box;
+&#125;</code></pre>
+
+    <p>
+      Esta regla es muy habitual al comenzar una hoja
+      de estilos. Facilita el cálculo del tamaño de
+      los elementos incluyendo el relleno y los bordes.
+    </p>
+
+    <p>
+      Estudiaremos esta propiedad con más detalle en
+      el tema dedicado al modelo de caja.
+    </p>
+
+    <aside class="key">
+      Utiliza el selector universal para reglas generales,
+      no para aplicar indiscriminadamente estilos que
+      solo necesitan algunos elementos.
+    </aside>
+  </section>
+
+  <!-- COMBINACIONES DE SELECTORES -->
+  <section id="combinaciones">
+    <h2>6. Agrupar y combinar selectores</h2>
+
+    <p>
+      CSS permite utilizar varios selectores dentro
+      de una misma regla. También podemos combinarlos
+      para seleccionar elementos de forma más precisa.
+    </p>
+
+    <!-- AGRUPACIÓN -->
+    <h3>6.1. Agrupación de selectores: la coma</h3>
+
+    <p>
+      Cuando varios elementos necesitan los mismos
+      estilos, podemos agruparlos separando sus
+      selectores mediante comas.
+    </p>
+
+    <div class="example">
+      <div class="code-grid">
+
+        <div>
+          <h3>HTML</h3>
+          <pre><code>&lt;h1&gt;Título principal&lt;/h1&gt;
+&lt;h2&gt;Subtítulo&lt;/h2&gt;
+&lt;p&gt;Párrafo de texto&lt;/p&gt;</code></pre>
+        </div>
+
+        <div>
+          <h3>CSS</h3>
+          <pre><code>h1, h2 &#123;
+  color: darkblue;
+&#125;</code></pre>
+        </div>
+
+      </div>
+
+      <div class="result grouping-demo">
+        <h3>Resultado</h3>
+        <p class="demo-h1">Título principal</p>
+        <p class="demo-h2">Subtítulo</p>
+        <p>Párrafo de texto</p>
+      </div>
+    </div>
+
+    <p>
+      Los títulos h1 y h2 reciben el mismo color.
+      El párrafo no se modifica.
+    </p>
+
+    <!-- SELECTOR COMPUESTO -->
+    <h3>6.2. Selector compuesto: sin espacios</h3>
+
+    <p>
+      Podemos unir una etiqueta y una clase para
+      seleccionar únicamente los elementos que
+      cumplen ambas condiciones.
+    </p>
+
+    <div class="example">
+
+      <div class="code-grid">
+        <div>
+          <h3>HTML</h3>
+          <pre><code>&lt;p class="aviso"&gt;
+  Párrafo importante
+&lt;/p&gt;
+
+&lt;div class="aviso"&gt;
+  Otro elemento
+&lt;/div&gt;</code></pre>
+        </div>
+
+        <div>
+          <h3>CSS</h3>
+          <pre><code>p.aviso &#123;
+  color: red;
+&#125;</code></pre>
+        </div>
+      </div>
+
+      <div class="result compound-demo">
+        <h3>Resultado</h3>
+        <p class="aviso">Párrafo importante</p>
+        <div class="aviso">Otro elemento</div>
+      </div>
+
+    </div>
+
+    <p>
+      Aunque ambos elementos tienen la clase aviso,
+      solamente se modifica el párrafo porque
+      el selector exige que sea una etiqueta p.
+    </p>
+
+    <!-- DESCENDIENTE -->
+    <h3>6.3. Selector descendiente: el espacio</h3>
+
+    <p>
+      Cuando separamos dos selectores mediante un
+      espacio, seleccionamos los elementos que se
+      encuentran dentro de otros elementos.
+    </p>
+
+    <div class="example">
+
+      <div class="code-grid">
+        <div>
+          <h3>HTML</h3>
+          <pre><code>&lt;div class="noticia"&gt;
+  &lt;p&gt;Párrafo interior&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Párrafo exterior&lt;/p&gt;</code></pre>
+        </div>
+
+        <div>
+          <h3>CSS</h3>
+          <pre><code>.noticia p &#123;
+  color: green;
+&#125;</code></pre>
+        </div>
+      </div>
+
+      <div class="result descendant-demo">
+        <h3>Resultado</h3>
+
+        <div class="noticia">
+          <p>Párrafo interior</p>
+        </div>
+
+        <p>Párrafo exterior</p>
+      </div>
+
+    </div>
+
+    <p>
+      Solo se modifica el párrafo que está dentro
+      del elemento con clase noticia.
+    </p>
+
+    <aside class="key">
+      <strong>Mucho cuidado con los espacios.</strong>
+      <p>
+        <code>p.aviso</code> selecciona un párrafo
+        que tiene la clase aviso.
+      </p>
+      <p>
+        <code>p .aviso</code> selecciona elementos
+        con clase aviso que están dentro de un párrafo.
+      </p>
+    </aside>
+
+    <details class="extra-example">
+      <summary>Ampliación: selector de hijo directo</summary>
+
+      <p>
+        El símbolo mayor que (<code>&gt;</code>) permite
+        seleccionar únicamente los hijos directos
+        de un elemento.
+      </p>
+
+      <pre><code>nav &gt; a &#123;
+  color: blue;
+&#125;</code></pre>
+
+      <p>
+        Selecciona los enlaces que son hijos directos
+        de nav, pero no aquellos que se encuentran
+        dentro de otros elementos de esa navegación.
+      </p>
+    </details>
+
+  </section>
+
+  <!-- RESUMEN PARTE I -->
+  <section class="selector-summary">
+    <h2>7. Resumen de los selectores básicos</h2>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Selector</th>
+            <th scope="col">Ejemplo</th>
+            <th scope="col">Qué selecciona</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Etiqueta</td>
+            <td><code>p</code></td>
+            <td>Todos los párrafos.</td>
+          </tr>
+          <tr>
+            <td>Clase</td>
+            <td><code>.aviso</code></td>
+            <td>Los elementos con esa clase.</td>
+          </tr>
+          <tr>
+            <td>Identificador</td>
+            <td><code>#cabecera</code></td>
+            <td>El elemento con ese ID.</td>
+          </tr>
+          <tr>
+            <td>Universal</td>
+            <td><code>*</code></td>
+            <td>Todos los elementos.</td>
+          </tr>
+          <tr>
+            <td>Agrupación</td>
+            <td><code>h1, h2</code></td>
+            <td>Todos los h1 y todos los h2.</td>
+          </tr>
+          <tr>
+            <td>Compuesto</td>
+            <td><code>p.aviso</code></td>
+            <td>Párrafos con clase aviso.</td>
+          </tr>
+          <tr>
+            <td>Descendiente</td>
+            <td><code>nav a</code></td>
+            <td>Enlaces dentro de nav.</td>
+          </tr>
+          <tr>
+            <td>Hijo directo</td>
+            <td><code>nav &gt; a</code></td>
+            <td>Enlaces hijos directos de nav.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details class="extra-example">
+      <summary>Comprueba lo que has aprendido</summary>
+
+      <p>¿Qué selector utilizarías para cada situación?</p>
+
+      <ol>
+        <li>Cambiar el color de todos los párrafos.</li>
+        <li>Destacar varios elementos importantes.</li>
+        <li>Modificar un elemento con ID cabecera.</li>
+        <li>Aplicar el mismo color a h1 y h2.</li>
+        <li>Modificar los enlaces dentro de un menú nav.</li>
+      </ol>
+
+      <details>
+        <summary>Ver soluciones</summary>
+        <ol>
+          <li><code>p</code></li>
+          <li><code>.importante</code></li>
+          <li><code>#cabecera</code></li>
+          <li><code>h1, h2</code></li>
+          <li><code>nav a</code></li>
+        </ol>
+      </details>
+    </details>
+  </section>
+
+  <!-- ===================================== -->
+  <!-- PARTE II. PSEUDOCLASES                -->
+  <!-- ===================================== -->
+
+  <section id="pseudoclases" class="part-heading">
+    <span class="part-label">PARTE II</span>
+    <h2>Pseudoclases</h2>
+
+    <p>
+      Hasta ahora hemos seleccionado elementos por su
+      etiqueta, clase, identificador o relación con otros
+      elementos. Las pseudoclases nos permiten seleccionarlos
+      también según una condición que CSS reconoce
+      automáticamente.
+    </p>
+  </section>
+
+  <!-- INTRODUCCIÓN PSEUDOCLASES -->
+  <section id="pseudo">
+    <h2>8. ¿Qué es una pseudoclase?</h2>
+
+    <p>
+      Una pseudoclase permite aplicar estilos a un elemento
+      HTML cuando cumple una determinada condición,
+      sin necesidad de añadir una clase adicional.
+    </p>
+
+    <p>Por ejemplo, podemos modificar un elemento:</p>
+
+    <ul>
+      <li>Cuando pasamos el ratón por encima.</li>
+      <li>Cuando se trata de un enlace visitado.</li>
+      <li>Cuando ocupa la primera o última posición.</li>
+      <li>Cuando una casilla de formulario está marcada.</li>
+    </ul>
+
+    <h3>Sintaxis</h3>
+
+    <pre><code>selector:pseudoclase &#123;
   propiedad: valor;
-&#125;</code></pre><p>El selector indica el elemento que observas; los dos puntos introducen la condición; la pseudoclase dice cuál es esa condición. Se escribe un único <code>:</code>. Los pseudoelementos usan <code>::</code>, pero los estudiaremos más adelante.</p><InfoGraphic src="/images/pseudoclases.png" alt="Infografía que explica qué son las pseudoclases, su sintaxis y ejemplos como hover, link, visited, first-child y nth-child" caption="Pseudoclases en CSS: guía de consulta y repaso" /></section>
-  <section id="enlaces"><h2>3. Estados de los enlaces</h2><p><code>:link</code> selecciona un enlace sin visitar y <code>:visited</code> uno que ya abriste. <code>:hover</code aparece al situar el puntero sobre el enlace y <code>:active</code mientras lo pulsas. Es recomendable declararlas en este orden: <strong>link, visited, hover, active</strong>; así las reglas posteriores pueden responder a la interacción.</p><div class="example"><div class="code-grid"><div><h3>HTML</h3><pre><code>&lt;a class="demo-link" href="#enlaces"&gt;
-  Pasa el puntero por aquí
-&lt;/a&gt;</code></pre></div><div><h3>CSS</h3><pre><code>.demo-link:link &#123; color: #6d3fa9; &#125;
-.demo-link:visited &#123; color: #7d3a83; &#125;
-.demo-link:hover &#123; color: #d94f91; &#125;
-.demo-link:active &#123; color: #24856a; &#125;</code></pre></div></div><div class="result pseudo-demo"><h3>Resultado</h3><a class="demo-link" href="#pseudo">Pasa el puntero por aquí</a><p>El color de <code>:visited</code> puede variar según el historial, pero los navegadores limitan por privacidad las propiedades que permite cambiar. No intentes usarlo para descubrir páginas visitadas.</p></div></div></section>
-  <section id="posicion"><h2>4. Pseudoclases de posición</h2><p><code>:first-child</code> selecciona el primer hijo de un padre; <code>:last-child</code>, el último. <code>:nth-child(2)</code> selecciona el hijo que ocupa la segunda posición. CSS cuenta los hijos reales del mismo padre: no cuenta solo los elementos que te interesan.</p><div class="example"><div class="code-grid"><div><h3>Tabla: HTML y CSS</h3><pre><code>&lt;tr&gt;&lt;td&gt;A&lt;/td&gt;&lt;td&gt;B&lt;/td&gt;
-  &lt;td&gt;C&lt;/td&gt;&lt;td&gt;D&lt;/td&gt;&lt;/tr&gt;
+&#125;</code></pre>
+
+    <p>
+      El selector indica qué elemento queremos seleccionar.
+      La pseudoclase, precedida de dos puntos, indica
+      la condición que debe cumplir.
+    </p>
+
+    <pre><code>a:hover &#123;
+  color: red;
+&#125;</code></pre>
+
+    <p>
+      En este ejemplo, el color del enlace cambia
+      a rojo cuando situamos el puntero encima.
+    </p>
+
+    <InfoGraphic
+      src="/images/pseudoclases.png"
+      alt="Infografía de pseudoclases CSS con ejemplos de hover, link, visited, first-child y nth-child"
+      caption="Pseudoclases en CSS: guía de consulta y repaso"
+    />
+
+    <aside class="key">
+      <strong>Recuerda.</strong>
+      Las pseudoclases se escriben con un único signo
+      de dos puntos (<code>:</code>).
+    </aside>
+
+  </section>
+
+  <!-- PSEUDOCLASES DE ENLACES -->
+  <section id="enlaces">
+    <h2>9. Pseudoclases de los enlaces</h2>
+
+    <p>
+      Los enlaces pueden cambiar de apariencia dependiendo
+      de la interacción del usuario. CSS dispone de varias
+      pseudoclases para controlar estos estados.
+    </p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Pseudoclase</th>
+            <th scope="col">Cuándo se aplica</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>:link</code></td>
+            <td>Cuando el enlace no ha sido visitado.</td>
+          </tr>
+          <tr>
+            <td><code>:visited</code></td>
+            <td>Cuando el enlace ha sido visitado.</td>
+          </tr>
+          <tr>
+            <td><code>:hover</code></td>
+            <td>Cuando situamos el puntero encima.</td>
+          </tr>
+          <tr>
+            <td><code>:active</code></td>
+            <td>Mientras estamos pulsando el enlace.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Ejemplo práctico: modificar los enlaces</h3>
+
+    <div class="example">
+
+      <div class="code-grid">
+        <div>
+          <h3>HTML</h3>
+          <pre><code>&lt;a href="https://www.google.es"&gt;
+  Google
+&lt;/a&gt;
+
+&lt;a href="https://www.wikipedia.org"&gt;
+  Wikipedia
+&lt;/a&gt;
+
+&lt;a href="https://www.youtube.com"&gt;
+  YouTube
+&lt;/a&gt;</code></pre>
+        </div>
+
+        <div>
+          <h3>CSS</h3>
+          <pre><code>a:link &#123;
+  color: yellow;
+  background-color: blue;
+&#125;
+
+a:visited &#123;
+  color: red;
+  background-color: white;
+&#125;
+
+a:hover &#123;
+  color: black;
+  background-color: yellow;
+  font-weight: bold;
+&#125;
+
+a:active &#123;
+  color: white;
+  background-color: green;
+&#125;</code></pre>
+        </div>
+      </div>
+
+      <div class="result link-demo">
+        <h3>Resultado interactivo</h3>
+
+        <div class="demo-links">
+          <a href="https://www.google.es">Google</a>
+          <a href="https://www.wikipedia.org">Wikipedia</a>
+          <a href="https://www.youtube.com">YouTube</a>
+        </div>
+
+        <p>
+          Pasa el ratón por encima de los enlaces.
+          Pulsa alguno y vuelve a esta página para
+          comprobar el estado visitado.
+        </p>
+      </div>
+
+    </div>
+
+    <h3>El orden de las pseudoclases</h3>
+
+    <p>
+      Un enlace puede estar visitado y tener al mismo
+      tiempo el puntero encima. Por ello, es importante
+      respetar el orden de las reglas CSS.
+    </p>
+
+    <div class="state-order">
+      <code>:link</code>
+      <span aria-hidden="true">→</span>
+      <code>:visited</code>
+      <span aria-hidden="true">→</span>
+      <code>:hover</code>
+      <span aria-hidden="true">→</span>
+      <code>:active</code>
+    </div>
+
+    <p>
+      Este orden se conoce como LVHA. Cuando los selectores
+      tienen la misma especificidad, las declaraciones
+      posteriores prevalecen sobre las anteriores si
+      modifican una misma propiedad.
+    </p>
+
+    <details class="extra-example">
+      <summary>Importante: el funcionamiento de :visited</summary>
+
+      <p>
+        Los navegadores limitan las propiedades que
+        podemos modificar mediante esta pseudoclase
+        para proteger la privacidad del usuario.
+      </p>
+
+      <p>
+        Podemos cambiar el color del texto y determinados
+        colores, como el del fondo. Sin embargo,
+        no podemos modificar libremente el tamaño,
+        el peso de la letra o el espacio interior.
+      </p>
+
+      <p>
+        Para que el cambio de fondo sea visible, el
+        enlace no visitado debe tener un fondo opaco.
+      </p>
+    </details>
+
+    <!-- ENLACES CON APARIENCIA DE BOTÓN -->
+    <details class="extra-example">
+
+      <summary>
+        Ampliación: enlaces con apariencia de botón
+      </summary>
+
+      <p>
+        Podemos conseguir que un enlace tenga apariencia
+        de botón sin cambiar su etiqueta HTML.
+        Para ello utilizamos CSS.
+      </p>
+
+      <div class="code-grid">
+
+        <div>
+          <h3>HTML</h3>
+          <pre><code>&lt;a class="boton" href="https://www.google.es"&gt;
+  Google
+&lt;/a&gt;</code></pre>
+        </div>
+
+        <div>
+          <h3>CSS</h3>
+          <pre><code>.boton &#123;
+  display: inline-block;
+  padding: 10px 20px;
+  border: 1px solid black;
+  border-radius: 5px;
+  text-decoration: none;
+  background-color: blue;
+&#125;
+
+.boton:link &#123;
+  color: yellow;
+&#125;
+
+.boton:visited &#123;
+  color: red;
+  background-color: white;
+&#125;
+
+.boton:hover &#123;
+  color: black;
+  background-color: yellow;
+  font-weight: bold;
+&#125;</code></pre>
+        </div>
+
+      </div>
+
+      <div class="result button-link-demo">
+        <h3>Resultado interactivo</h3>
+        <div class="demo-links">
+          <a class="boton" href="https://www.google.es">
+            Google
+          </a>
+          <a class="boton" href="https://www.wikipedia.org">
+            Wikipedia
+          </a>
+          <a class="boton" href="https://www.youtube.com">
+            YouTube
+          </a>
+        </div>
+      </div>
+
+      <p>
+        Aunque visualmente parece un botón, sigue siendo
+        un enlace. Por eso podemos utilizar la
+        pseudoclase <code>:visited</code>.
+      </p>
+
+      <aside class="key">
+        No debemos introducir una etiqueta a dentro de
+        una etiqueta button. Los enlaces permiten navegar
+        y los botones permiten realizar acciones.
+      </aside>
+
+    </details>
+
+  </section>
+
+  <!-- PSEUDOCLASES DE POSICIÓN -->
+  <section id="posicion">
+    <h2>10. Pseudoclases de posición</h2>
+
+    <p>
+      Estas pseudoclases permiten seleccionar elementos
+      según el lugar que ocupan dentro de su elemento
+      padre.
+    </p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Pseudoclase</th>
+            <th scope="col">Qué selecciona</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>:first-child</code></td>
+            <td>El elemento que es el primer hijo.</td>
+          </tr>
+          <tr>
+            <td><code>:last-child</code></td>
+            <td>El elemento que es el último hijo.</td>
+          </tr>
+          <tr>
+            <td><code>:nth-child(2)</code></td>
+            <td>El elemento que es el segundo hijo.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- EJEMPLO TABLA -->
+    <h3>10.1. Destacar celdas de una tabla</h3>
+
+    <p>
+      Podemos seleccionar automáticamente la primera
+      o la última celda de cada fila sin necesidad
+      de añadir clases a las celdas.
+    </p>
+
+    <div class="example">
+
+      <div class="code-grid">
+
+        <div>
+          <h3>HTML</h3>
+          <pre><code>&lt;table&gt;
+  &lt;tr&gt;
+    &lt;td&gt;A1&lt;/td&gt;
+    &lt;td&gt;B1&lt;/td&gt;
+    &lt;td&gt;C1&lt;/td&gt;
+    &lt;td&gt;D1&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;A2&lt;/td&gt;
+    &lt;td&gt;B2&lt;/td&gt;
+    &lt;td&gt;C2&lt;/td&gt;
+    &lt;td&gt;D2&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;A3&lt;/td&gt;
+    &lt;td&gt;B3&lt;/td&gt;
+    &lt;td&gt;C3&lt;/td&gt;
+    &lt;td&gt;D3&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</code></pre>
+        </div>
+
+        <div>
+          <h3>CSS</h3>
+          <pre><code>table &#123;
+  border: 3px solid black;
+  border-collapse: collapse;
+&#125;
+
+td &#123;
+  border: 2px solid black;
+  padding: 10px;
+&#125;
+
+td:first-child &#123;
+  color: blue;
+  background-color: yellow;
+&#125;
 
 td:last-child &#123;
-  background: #fceaf3;
-  color: #8b1d57;
-&#125;</code></pre></div><div><h3>Lista: CSS</h3><pre><code>li:nth-child(2) &#123;
-  background: #e9f6ef;
-  font-weight: 700;
-&#125;</code></pre></div></div><div class="result pseudo-demo"><h3>Resultado</h3><table class="last-cell"><tbody><tr><td>A1</td><td>B1</td><td>C1</td><td>D1</td></tr><tr><td>A2</td><td>B2</td><td>C2</td><td>D2</td></tr><tr><td>A3</td><td>B3</td><td>C3</td><td>D3</td></tr></tbody></table><p>La última celda de cada fila se destaca automáticamente: no añadimos ninguna clase a las celdas.</p><ol class="second-item"><li>Primer elemento</li><li>Segundo elemento</li><li>Tercer elemento</li></ol><p>En esta lista, CSS encuentra el segundo <code>li</code> por su posición.</p></div></div></section>
-  <section id="formularios"><h2>5. Interacción con formularios</h2><p><code>:focus</code> aparece cuando un campo recibe el foco, por ejemplo con Tab. <code>:checked</code> identifica una casilla marcada. <code>:disabled</code> identifica un control no disponible. Son estados reales del formulario: CSS responde a ellos sin scripts ni clases de apoyo.</p><div class="form-demo"><label>Correo <input type="email" placeholder="nombre@ejemplo.es"></label><label><input type="checkbox"> Quiero recibir novedades</label><button disabled>Enviar</button></div><pre><code>input:focus &#123; outline: 3px solid #6d3fa9; &#125;
-input:checked &#123; accent-color: #24856a; &#125;
-button:disabled &#123; opacity: .55; &#125;</code></pre><p>Usa <code>:focus</code> para que quien navega con teclado sepa dónde está. No elimines el foco sin ofrecer un indicador visible equivalente.</p></section>
-  <section id="comparacion"><h2>6. Clase y pseudoclase: dos formas de seleccionar</h2><table><thead><tr><th>Selector</th><th>Cómo funciona</th><th>Cuándo usarlo</th></tr></thead><tbody><tr><td><code>.destacada</code></td><td>El HTML debe incluir expresamente una clase.</td><td>Cuando tú decides qué elementos comparten un estilo.</td></tr><tr><td><code>td:last-child</code></td><td>CSS encuentra automáticamente la celda que cumple la condición.</td><td>Cuando importa el estado o la posición, no una marca manual.</td></tr></tbody></table><aside class="key"><strong>Error habitual.</strong> No añadas una clase a cada última celda solo para destacarla: <code>td:last-child</code> seguirá funcionando aunque añadas nuevas filas.</aside></section>
-  <section class="practice"><h2>Prueba tú</h2><p>Crea una lista de cuatro tareas. Haz que la primera tenga un borde verde, la última un borde rosa y la segunda un fondo suave usando pseudoclases. Después crea un enlace con <code>:hover</code> y <code>:focus</code> visibles.</p><details><summary>Ver orientación</summary><pre><code>li:first-child &#123; border-left: 4px solid #24856a; &#125;
-li:last-child &#123; border-left: 4px solid #d94f91; &#125;
-li:nth-child(2) &#123; background: #f2ebfa; &#125;</code></pre></details></section>
-  <TopicNav n={2}/>
+  color: red;
+  background-color: lightgray;
+&#125;</code></pre>
+        </div>
+
+      </div>
+
+      <div class="result position-demo">
+        <h3>Resultado</h3>
+
+        <div class="table-wrapper">
+          <table class="position-table">
+            <tbody>
+              <tr>
+                <td>A1</td><td>B1</td><td>C1</td><td>D1</td>
+              </tr>
+              <tr>
+                <td>A2</td><td>B2</td><td>C2</td><td>D2</td>
+              </tr>
+              <tr>
+                <td>A3</td><td>B3</td><td>C3</td><td>D3</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          CSS selecciona la primera y la última
+          celda de cada fila automáticamente.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- EJEMPLO LISTA -->
+    <h3>10.2. Seleccionar elementos de una lista</h3>
+
+    <p>
+      La pseudoclase <code>:nth-child()</code> permite
+      seleccionar un elemento según su posición.
+      CSS empieza a contar desde el número 1.
+    </p>
+
+    <div class="example">
+
+      <div class="code-grid">
+
+        <div>
+          <h3>HTML</h3>
+          <pre><code>&lt;ol&gt;
+  &lt;li&gt;Primer elemento&lt;/li&gt;
+  &lt;li&gt;Segundo elemento&lt;/li&gt;
+  &lt;li&gt;Tercer elemento&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+        </div>
+
+        <div>
+          <h3>CSS</h3>
+          <pre><code>li:nth-child(2) &#123;
+  background-color: yellow;
+  font-weight: bold;
+&#125;</code></pre>
+        </div>
+
+      </div>
+
+      <div class="result list-demo">
+        <h3>Resultado</h3>
+
+        <ol class="second-item">
+          <li>Primer elemento</li>
+          <li>Segundo elemento</li>
+          <li>Tercer elemento</li>
+        </ol>
+      </div>
+
+    </div>
+
+    <details class="extra-example">
+      <summary>Ampliación: seleccionar posiciones pares e impares</summary>
+
+      <p>
+        También podemos seleccionar automáticamente
+        elementos que ocupan posiciones pares o impares.
+        Es especialmente útil en tablas con muchas filas.
+      </p>
+
+      <pre><code>tr:nth-child(even) &#123;
+  background-color: lightgray;
+&#125;
+
+tr:nth-child(odd) &#123;
+  background-color: white;
+&#125;</code></pre>
+
+      <div class="result">
+        <table class="striped-table">
+          <thead>
+            <tr>
+              <th scope="col">Producto</th>
+              <th scope="col">Precio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Teclado</td><td>25 €</td></tr>
+            <tr><td>Ratón</td><td>15 €</td></tr>
+            <tr><td>Monitor</td><td>120 €</td></tr>
+            <tr><td>Altavoces</td><td>35 €</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        <code>even</code> significa par y
+        <code>odd</code> significa impar.
+      </p>
+    </details>
+
+    <aside class="key">
+      Las pseudoclases de posición cuentan los elementos
+      hermanos dentro del mismo padre, no solamente
+      los que tienen una determinada etiqueta.
+    </aside>
+
+  </section>
+
+  <!-- PSEUDOCLASES FORMULARIOS -->
+  <section id="formularios">
+    <h2>11. Pseudoclases de los formularios</h2>
+
+    <p>
+      Los formularios también tienen elementos cuyo
+      estado puede cambiar cuando el usuario interactúa
+      con ellos.
+    </p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Pseudoclase</th>
+            <th scope="col">Cuándo se aplica</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>:focus</code></td>
+            <td>Cuando un elemento recibe el foco.</td>
+          </tr>
+          <tr>
+            <td><code>:checked</code></td>
+            <td>Cuando una casilla está marcada.</td>
+          </tr>
+          <tr>
+            <td><code>:disabled</code></td>
+            <td>Cuando un control está deshabilitado.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="example">
+
+      <div class="code-grid">
+
+        <div>
+          <h3>HTML</h3>
+          <pre><code>&lt;label&gt;
+  Correo electrónico
+  &lt;input type="email"&gt;
+&lt;/label&gt;
+
+&lt;label&gt;
+  &lt;input type="checkbox"&gt;
+  Acepto las condiciones
+&lt;/label&gt;
+
+&lt;button disabled&gt;
+  Enviar
+&lt;/button&gt;</code></pre>
+        </div>
+
+        <div>
+          <h3>CSS</h3>
+          <pre><code>input:focus &#123;
+  outline: 3px solid purple;
+&#125;
+
+input:checked &#123;
+  accent-color: green;
+&#125;
+
+button:disabled &#123;
+  opacity: 0.55;
+&#125;</code></pre>
+        </div>
+
+      </div>
+
+      <div class="result">
+        <h3>Resultado interactivo</h3>
+
+        <div class="form-demo">
+
+          <label class="email-label">
+            Correo electrónico
+            <input
+              type="email"
+              placeholder="nombre@ejemplo.es"
+            />
+          </label>
+
+          <label class="checkbox-label">
+            <input type="checkbox" />
+            Acepto las condiciones
+          </label>
+
+          <button type="button" disabled>
+            Enviar
+          </button>
+
+        </div>
+
+        <p>
+          Pulsa sobre el campo de correo, marca
+          la casilla y observa el botón deshabilitado.
+        </p>
+      </div>
+
+    </div>
+
+    <aside class="key">
+      <strong>Accesibilidad.</strong>
+      No elimines el indicador de foco sin sustituirlo
+      por otro visible. Las personas que navegan con
+      el teclado necesitan saber qué elemento está
+      seleccionado.
+    </aside>
+
+  </section>
+
+  <!-- COMPARACIÓN -->
+  <section id="comparacion">
+    <h2>12. Diferencia entre clase y pseudoclase</h2>
+
+    <p>
+      Una clase es una marca que nosotros añadimos al
+      HTML. Una pseudoclase es una condición que CSS
+      puede reconocer automáticamente.
+    </p>
+
+    <div class="comparison-grid">
+
+      <div class="comparison-item">
+
+        <h3>Clase</h3>
+
+        <pre><code>&lt;td class="destacada"&gt;
+  Celda
+&lt;/td&gt;</code></pre>
+
+        <pre><code>.destacada &#123;
+  background-color: yellow;
+&#125;</code></pre>
+
+        <p>
+          Debemos asignar expresamente la clase
+          al elemento que queremos destacar.
+        </p>
+
+      </div>
+
+      <div class="comparison-item">
+
+        <h3>Pseudoclase</h3>
+
+        <pre><code>&lt;td&gt;Celda&lt;/td&gt;</code></pre>
+
+        <pre><code>td:last-child &#123;
+  background-color: yellow;
+&#125;</code></pre>
+
+        <p>
+          CSS selecciona la celda automáticamente
+          si es la última de su fila.
+        </p>
+
+      </div>
+
+    </div>
+
+    <details class="extra-example">
+      <summary>¿Qué diferencia hay con los pseudoelementos?</summary>
+
+      <p>
+        Las pseudoclases seleccionan elementos según
+        una condición. Los pseudoelementos permiten
+        seleccionar una parte de un elemento o
+        generar contenido adicional.
+      </p>
+
+      <pre><code>/* Pseudoclase */
+p:hover &#123;
+  color: red;
+&#125;
+
+/* Pseudoelemento */
+p::first-letter &#123;
+  color: red;
+&#125;</code></pre>
+
+      <div class="result pseudo-comparison">
+        <div>
+          <strong>Pseudoclase</strong>
+          <p class="pseudo-class-example">
+            Pasa el ratón sobre este párrafo.
+          </p>
+        </div>
+
+        <div>
+          <strong>Pseudoelemento</strong>
+          <p class="pseudo-element-example">
+            Solo cambia la primera letra.
+          </p>
+        </div>
+      </div>
+
+      <p>
+        Recuerda: pseudoclases con <code>:</code>
+        y pseudoelementos con <code>::</code>.
+      </p>
+    </details>
+
+  </section>
+
+  <!-- ACTIVIDADES -->
+  <section id="practica" class="practice">
+    <h2>13. Actividades prácticas</h2>
+
+    <p>
+      Utiliza lo que has aprendido para resolver
+      los siguientes ejercicios en tu editor de código.
+      Crea un archivo HTML y una hoja de estilos externa.
+    </p>
+
+    <details class="extra-example">
+      <summary>Actividad 1. Selectores básicos</summary>
+
+      <p>Crea una página con un título y tres párrafos.</p>
+
+      <ol>
+        <li>Pon todos los párrafos de color azul.</li>
+        <li>
+          Asigna una clase llamada aviso al segundo
+          párrafo y ponle fondo amarillo.
+        </li>
+        <li>
+          Asigna el ID principal al título y cambia
+          su color a verde.
+        </li>
+      </ol>
+
+      <details>
+        <summary>Ver solución CSS</summary>
+        <pre><code>p &#123;
+  color: blue;
+&#125;
+
+.aviso &#123;
+  background-color: yellow;
+&#125;
+
+#principal &#123;
+  color: green;
+&#125;</code></pre>
+      </details>
+    </details>
+
+    <details class="extra-example">
+      <summary>Actividad 2. Selectores de posición</summary>
+
+      <p>Crea una tabla de tres filas y cuatro columnas.</p>
+
+      <ol>
+        <li>Añade bordes negros a la tabla y las celdas.</li>
+        <li>
+          Utiliza una clase para destacar la primera
+          celda de cada fila con texto azul y fondo amarillo.
+        </li>
+        <li>
+          Utiliza una pseudoclase para destacar la última
+          celda con texto rojo y fondo gris.
+        </li>
+      </ol>
+
+      <details>
+        <summary>Ver orientación CSS</summary>
+        <pre><code>table &#123;
+  border: 3px solid black;
+  border-collapse: collapse;
+&#125;
+
+td &#123;
+  border: 2px solid black;
+  padding: 10px;
+&#125;
+
+.destacada &#123;
+  color: blue;
+  background-color: yellow;
+&#125;
+
+td:last-child &#123;
+  color: red;
+  background-color: lightgray;
+&#125;</code></pre>
+
+        <p>
+          Recuerda añadir <code>class="destacada"</code>
+          a la primera celda de cada fila en el HTML.
+        </p>
+      </details>
+    </details>
+
+    <details class="extra-example">
+      <summary>Actividad 3. Pseudoclases de enlaces</summary>
+
+      <p>Crea tres enlaces y modifica sus estados:</p>
+
+      <ol>
+        <li>Enlace sin visitar: texto amarillo y fondo azul.</li>
+        <li>Ratón encima: texto negro, negrita y fondo amarillo.</li>
+        <li>Enlace visitado: texto rojo y fondo blanco.</li>
+      </ol>
+
+      <details>
+        <summary>Ver solución CSS</summary>
+        <pre><code>a:link &#123;
+  color: yellow;
+  background-color: blue;
+&#125;
+
+a:visited &#123;
+  color: red;
+  background-color: white;
+&#125;
+
+a:hover &#123;
+  color: black;
+  background-color: yellow;
+  font-weight: bold;
+&#125;</code></pre>
+      </details>
+    </details>
+
+  </section>
+
+  <!-- RESUMEN FINAL -->
+  <section class="final-summary">
+    <h2>Qué debes recordar de este tema</h2>
+
+    <ul>
+      <li>Un selector indica a qué elementos se aplica CSS.</li>
+      <li>La etiqueta selecciona todos los elementos de su tipo.</li>
+      <li>Las clases utilizan un punto y son reutilizables.</li>
+      <li>Los identificadores utilizan una almohadilla y son únicos.</li>
+      <li>La coma permite agrupar selectores.</li>
+      <li>El espacio permite seleccionar descendientes.</li>
+      <li>Las pseudoclases seleccionan según una condición.</li>
+      <li>Las pseudoclases utilizan un único signo de dos puntos.</li>
+    </ul>
+  </section>
+
+  <TopicNav n={2} />
+
 </Base>
+
 <style>
-.pseudo-demo .demo-link{font-size:1.1rem;font-weight:700}.pseudo-demo .demo-link:link{color:#6d3fa9}.pseudo-demo .demo-link:visited{color:#7d3a83}.pseudo-demo .demo-link:hover{color:#d94f91}.pseudo-demo .demo-link:active{color:#24856a}.last-cell td:last-child{background:#fceaf3;color:#8b1d57;font-weight:700}.second-item li:nth-child(2){background:#e9f6ef;font-weight:700}.form-demo{display:grid;gap:.7rem;max-width:28rem}.form-demo input:focus{outline:3px solid #6d3fa9;outline-offset:2px}.form-demo input:checked{accent-color:#24856a}.form-demo button:disabled{opacity:.55}.form-demo label{display:flex;gap:.5rem;align-items:center}.form-demo label:first-child{display:grid;align-items:stretch}.form-demo input[type=email]{padding:.45rem}.selector-result .aviso{background:#fceaf3;padding:.35rem}.selector-result #selector-cabecera{color:#6d3fa9;font-weight:800}
+
+  /* Separación de las dos partes del tema */
+
+  .part-heading {
+    margin-block: 3rem 1.5rem;
+    padding: 1.5rem 0;
+    border-top: 3px solid #6d3fa9;
+    border-bottom: 1px solid #d8d3e1;
+  }
+
+  .part-heading h2 {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    margin-block: .5rem;
+  }
+
+  .part-heading p {
+    max-width: 75ch;
+    margin-bottom: 0;
+  }
+
+  .part-label {
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+  }
+
+  section[id] {
+    scroll-margin-top: 2rem;
+  }
+
+  /* Explicación de la sintaxis */
+
+  .syntax-explanation {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-block: 1.5rem;
+  }
+
+  .syntax-explanation > div {
+    padding: 1rem;
+    border: 1px solid #d8d3e1;
+    border-radius: 8px;
+  }
+
+  .syntax-explanation strong {
+    display: block;
+    margin-top: .75rem;
+  }
+
+  .syntax-explanation p {
+    margin-bottom: 0;
+    font-size: .95rem;
+  }
+
+  /* Apartados desplegables */
+
+  .extra-example {
+    border: 1px solid #d8d3e1;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-block: 1.25rem;
+  }
+
+  summary {
+    font-weight: 600;
+    cursor: pointer;
+    line-height: 1.5;
+  }
+
+  summary:focus-visible {
+    outline: 3px solid #6d3fa9;
+    outline-offset: 4px;
+  }
+
+  details[open] > summary {
+    margin-bottom: 1rem;
+  }
+
+  details details {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-left: 3px solid #6d3fa9;
+  }
+
+  /* Demostraciones de selectores básicos */
+
+  .tag-demo p {
+    color: blue;
+  }
+
+  .class-demo .aviso {
+    background-color: yellow;
+    color: black;
+  }
+
+  .multiple-class-demo .aviso {
+    background-color: yellow;
+    color: black;
+  }
+
+  .multiple-class-demo .urgente {
+    font-weight: bold;
+  }
+
+  .demo-heading {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .id-demo #titulo-principal {
+    color: purple;
+  }
+
+  .grouping-demo .demo-h1,
+  .grouping-demo .demo-h2 {
+    color: darkblue;
+    font-weight: bold;
+  }
+
+  .demo-h1 {
+    font-size: 1.7rem;
+  }
+
+  .demo-h2 {
+    font-size: 1.3rem;
+  }
+
+  .compound-demo p.aviso {
+    color: red;
+  }
+
+  .descendant-demo .noticia {
+    border: 1px dashed #aaa;
+    padding: .75rem;
+    margin-bottom: .75rem;
+  }
+
+  .descendant-demo .noticia p {
+    color: green;
+  }
+
+  /* Demostraciones de enlaces */
+
+  .demo-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin-block: 1rem;
+  }
+
+  .link-demo a:link {
+    color: yellow;
+    background-color: blue;
+  }
+
+  .link-demo a:visited {
+    color: red;
+    background-color: white;
+  }
+
+  .link-demo a:hover {
+    color: black;
+    background-color: yellow;
+    font-weight: bold;
+  }
+
+  .link-demo a:active {
+    color: white;
+    background-color: green;
+  }
+
+  .state-order {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .6rem;
+    margin-block: 1rem;
+  }
+
+  .state-order code {
+    padding: .5rem .75rem;
+    border: 1px solid #d8d3e1;
+    border-radius: 5px;
+  }
+
+  /* Enlaces con apariencia de botón */
+
+  .button-link-demo .boton {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1px solid black;
+    border-radius: 5px;
+    text-decoration: none;
+    background-color: blue;
+  }
+
+  .button-link-demo .boton:link {
+    color: yellow;
+  }
+
+  .button-link-demo .boton:visited {
+    color: red;
+    background-color: white;
+  }
+
+  .button-link-demo .boton:hover {
+    color: black;
+    background-color: yellow;
+    font-weight: bold;
+  }
+
+  .demo-links a:focus-visible {
+    outline: 3px solid #6d3fa9;
+    outline-offset: 4px;
+  }
+
+  /* Demostraciones de posición */
+
+  .position-table {
+    width: auto;
+    border: 3px solid black;
+    border-collapse: collapse;
+  }
+
+  .position-table td {
+    border: 2px solid black;
+    padding: 10px;
+    text-align: center;
+    color: black;
+    background-color: white;
+  }
+
+  .position-table td:first-child {
+    color: blue;
+    background-color: yellow;
+  }
+
+  .position-table td:last-child {
+    color: red;
+    background-color: lightgray;
+  }
+
+  .second-item li {
+    padding: .35rem;
+  }
+
+  .second-item li:nth-child(2) {
+    color: black;
+    background-color: yellow;
+    font-weight: bold;
+  }
+
+  .striped-table tbody tr:nth-child(even) {
+    background-color: lightgray;
+    color: black;
+  }
+
+  .striped-table tbody tr:nth-child(odd) {
+    background-color: white;
+    color: black;
+  }
+
+  /* Demostraciones de formularios */
+
+  .form-demo {
+    display: grid;
+    gap: 1rem;
+    max-width: 28rem;
+    margin-block: 1rem;
+  }
+
+  .email-label {
+    display: grid;
+    gap: .5rem;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  .form-demo input[type="email"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: .65rem;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+  }
+
+  .form-demo input:focus {
+    outline: 3px solid purple;
+    outline-offset: 2px;
+  }
+
+  .form-demo input:checked {
+    accent-color: green;
+  }
+
+  .form-demo button {
+    padding: .65rem 1.25rem;
+    border: 1px solid #999;
+    border-radius: 4px;
+  }
+
+  .form-demo button:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+  }
+
+  /* Comparaciones */
+
+  .comparison-grid,
+  .pseudo-comparison {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .comparison-item {
+    border: 1px solid #d8d3e1;
+    border-radius: 8px;
+    padding: 1rem;
+    min-width: 0;
+  }
+
+  .pseudo-class-example:hover {
+    color: red;
+  }
+
+  .pseudo-element-example::first-letter {
+    color: red;
+  }
+
+  /* Tablas y código responsive */
+
+  .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin-block: 1rem;
+  }
+
+  pre {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  .code-grid > div {
+    min-width: 0;
+  }
+
+  /* Resumen del tema */
+
+  .final-summary {
+    margin-block: 2rem;
+    padding: 1.5rem;
+    border: 1px solid #d8d3e1;
+    border-left: 4px solid #6d3fa9;
+    border-radius: 8px;
+  }
+
+  .final-summary h2 {
+    margin-top: 0;
+  }
+
+  .final-summary li {
+    margin-bottom: .5rem;
+  }
+
+  /* Adaptación a pantallas pequeñas */
+
+  @media (max-width: 640px) {
+
+    .syntax-explanation,
+    .comparison-grid,
+    .pseudo-comparison,
+    .code-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .part-heading {
+      margin-top: 2rem;
+    }
+
+    .extra-example,
+    .comparison-item,
+    .final-summary {
+      padding: .85rem;
+    }
+
+    .demo-links {
+      gap: .75rem;
+    }
+
+  }
+
 </style>
