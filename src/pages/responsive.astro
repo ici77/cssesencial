@@ -1,4 +1,1873 @@
+
 ---
-import Lesson from '../components/Lesson.astro'; const q=[['¿Qué configura el ancho móvil?',['meta viewport','title','footer','hover'],0,'viewport adapta el área visual.'],['¿Qué evita crecer demasiado?',['max-width','font-style','ID','float'],0,'max-width pone un límite.'],['¿Qué enfoque empieza en móvil?',['Mobile First','Desktop Last','Float First','ID First'],0,'Primero base pequeña.'],['¿Qué introduce breakpoint?',['@media','@font','@keyframes','@import'],0,'@media aplica reglas según condición.'],['¿Los breakpoints son fijos?',['Sí','No','Solo 768','Solo 1024'],1,'Se eligen según el contenido.']];
+import Base from '../layouts/Base.astro';
+import InfoGraphic from '../components/InfoGraphic.astro';
+import TopicNav from '../components/TopicNav.astro';
 ---
-<Lesson n={9} title="Diseño responsive esencial" lead="Una página responsive se adapta al espacio disponible, no a una lista rígida de dispositivos." objectives={['Evitar anchuras fijas','Usar media queries','Crear columnas adaptables']} concept="Incluye meta viewport. width:100% permite ocupar el contenedor y max-width fija un límite. Las imágenes deben poder reducirse. Mobile First escribe primero la base de una columna y añade @media min-width cuando el contenido necesita más espacio. Los puntos de ruptura son orientativos." html={'<section class="catalogo"><article>A</article><article>B</article></section>'} css={'.catalogo { display:grid; grid-template-columns:1fr; gap:16px; }\n@media (min-width:768px) { .catalogo { grid-template-columns:repeat(2,1fr); } }'} practice="Haz un catálogo de una columna y añade dos columnas a partir de 768px." summary={[['width:100%','ancho flexible','width:100%'],['max-width','límite','max-width:600px'],['@media','regla condicional','min-width:768px']]} questions={q} image={{src:'/images/Diseño responsive_ espacios que se adaptan.png',alt:'Diseño responsive y tamaños',caption:'Diseño responsive: espacio disponible'}} />
+
+<Base title="Tema 9 · Diseño responsive esencial">
+
+  <header class="lesson-header">
+    <p class="eyebrow">Tema 9 · CSS Esencial</p>
+    <h1>Diseño responsive esencial</h1>
+
+    <p class="lead">
+      Aprende a crear páginas web que adapten su apariencia
+      al tamaño de la pantalla utilizando CSS y media queries.
+    </p>
+  </header>
+
+  <nav class="lesson-index" aria-label="Apartados">
+    <strong>En esta lección</strong>
+
+    <a href="#introduccion">Diseño responsive</a>
+    <a href="#viewport">Meta viewport</a>
+    <a href="#anchuras">Anchuras flexibles</a>
+    <a href="#breakpoints">Breakpoints</a>
+    <a href="#media-html">Atributo media en HTML</a>
+    <a href="#media-css">Regla @media en CSS</a>
+    <a href="#enfoques">Mobile First y Desktop First</a>
+    <a href="#columnas">Columnas adaptables</a>
+    <a href="#comprobacion">Comprobar el diseño</a>
+    <a href="#practica">Actividad práctica</a>
+    <a href="#autoevaluacion">Autoevaluación</a>
+  </nav>
+
+  <section class="objectives">
+    <h2>Qué vas a aprender</h2>
+
+    <ul>
+      <li>Comprender qué es el diseño responsive.</li>
+      <li>Utilizar anchuras flexibles.</li>
+      <li>Entender qué es un punto de ruptura.</li>
+      <li>Enlazar diferentes hojas de estilos según el ancho disponible.</li>
+      <li>Utilizar media queries dentro de CSS.</li>
+      <li>Diferenciar Mobile First y Desktop First.</li>
+      <li>Comprobar una página en diferentes tamaños de pantalla.</li>
+    </ul>
+  </section>
+
+  <!-- INTRODUCCIÓN -->
+
+  <section id="introduccion">
+
+    <h2>1. ¿Qué es el diseño responsive?</h2>
+
+    <p>
+      Una página web puede visualizarse desde un ordenador,
+      una tableta o un teléfono móvil. Cada dispositivo
+      dispone de un espacio diferente para mostrar el contenido.
+    </p>
+
+    <p>
+      El diseño responsive, también llamado diseño web
+      adaptable, permite que una misma página modifique
+      su presentación según el espacio disponible.
+    </p>
+
+    <p>
+      No necesitamos crear una página HTML diferente para
+      cada dispositivo. Utilizamos el mismo contenido HTML
+      y adaptamos su apariencia mediante CSS.
+    </p>
+
+    <div class="device-comparison">
+
+      <div class="device-example desktop-example">
+        <strong>Ordenador</strong>
+
+        <div class="device-screen">
+          <div class="mock-header">Mi página web</div>
+
+          <div class="mock-content desktop-content">
+            <div>Contenido 1</div>
+            <div>Contenido 2</div>
+            <div>Contenido 3</div>
+          </div>
+
+          <div class="mock-footer">Pie de página</div>
+        </div>
+      </div>
+
+      <div class="device-example mobile-example">
+        <strong>Móvil</strong>
+
+        <div class="device-screen">
+          <div class="mock-header">Mi página web</div>
+
+          <div class="mock-content mobile-content">
+            <div>Contenido 1</div>
+            <div>Contenido 2</div>
+            <div>Contenido 3</div>
+          </div>
+
+          <div class="mock-footer">Pie de página</div>
+        </div>
+      </div>
+
+    </div>
+
+    <p>
+      Observa que el contenido es el mismo. Lo que cambia
+      es la distribución de los elementos para aprovechar
+      mejor el espacio disponible.
+    </p>
+
+    <InfoGraphic
+      src="/images/Diseño responsive_ espacios que se adaptan.png"
+      alt="Infografía sobre diseño responsive y adaptación a diferentes tamaños de pantalla"
+      caption="Diseño responsive: espacios que se adaptan"
+    />
+
+    <aside class="key">
+      <strong>Idea fundamental.</strong>
+      HTML define el contenido de la página. CSS permite
+      adaptar su presentación a diferentes tamaños de pantalla.
+    </aside>
+
+  </section>
+
+  <!-- VIEWPORT -->
+
+  <section id="viewport">
+
+    <h2>2. La etiqueta meta viewport</h2>
+
+    <p>
+      Antes de comenzar a crear un diseño responsive,
+      debemos incluir una etiqueta especial dentro
+      del head de nuestro documento HTML.
+    </p>
+
+    <pre><code>&lt;meta name="viewport"
+      content="width=device-width, initial-scale=1.0"&gt;</code></pre>
+
+    <p>
+      Esta etiqueta indica al navegador móvil que debe
+      adaptar el ancho inicial de la página al ancho
+      disponible del dispositivo.
+    </p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Instrucción</th>
+            <th scope="col">Significado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>name="viewport"</code></td>
+            <td>Configura el área de visualización.</td>
+          </tr>
+          <tr>
+            <td><code>width=device-width</code></td>
+            <td>Adapta el ancho inicial al dispositivo.</td>
+          </tr>
+          <tr>
+            <td><code>initial-scale=1.0</code></td>
+            <td>Establece el nivel de zoom inicial.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details class="extra-example">
+      <summary>Ver dónde se coloca en HTML</summary>
+
+      <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="es"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport"
+          content="width=device-width, initial-scale=1.0"&gt;
+
+    &lt;title&gt;Mi página responsive&lt;/title&gt;
+
+    &lt;link rel="stylesheet" href="estilos.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+    &lt;h1&gt;Mi página web&lt;/h1&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    </details>
+
+    <aside class="key">
+      <strong>Recuerda.</strong>
+      Incluye siempre la etiqueta meta viewport cuando
+      desarrolles una página web responsive.
+    </aside>
+
+  </section>
+
+  <!-- ANCHURAS FLEXIBLES -->
+
+  <section id="anchuras">
+
+    <h2>3. Anchuras fijas y anchuras flexibles</h2>
+
+    <p>
+      Uno de los problemas más habituales al crear una
+      página web es asignar tamaños demasiado grandes
+      que no pueden adaptarse a pantallas pequeñas.
+    </p>
+
+    <h3>3.1. Anchura fija</h3>
+
+    <pre><code>main &#123;
+    width: 900px;
+&#125;</code></pre>
+
+    <p>
+      El elemento tiene una anchura de 900 píxeles,
+      independientemente del espacio disponible.
+      Si la pantalla es más estrecha, puede aparecer
+      desplazamiento horizontal.
+    </p>
+
+    <div class="width-preview">
+      <span>Contenedor disponible</span>
+
+      <div class="fixed-width-example">
+        Elemento de anchura fija
+      </div>
+    </div>
+
+    <h3>3.2. Anchura flexible</h3>
+
+    <pre><code>main &#123;
+    width: 100%;
+&#125;</code></pre>
+
+    <p>
+      El elemento ocupa el 100% de la anchura disponible
+      en su contenedor. De esta manera puede reducirse
+      cuando el espacio disponible disminuye.
+    </p>
+
+    <div class="width-preview">
+      <span>Contenedor disponible</span>
+
+      <div class="flexible-width-example">
+        Elemento de anchura flexible
+      </div>
+    </div>
+
+    <h3>3.3. Limitar la anchura con max-width</h3>
+
+    <p>
+      En una pantalla muy grande tampoco interesa que
+      determinados contenidos ocupen todo el espacio.
+      Podemos establecer un límite utilizando max-width.
+    </p>
+
+    <pre><code>main &#123;
+    width: 90%;
+    max-width: 900px;
+    margin: 0 auto;
+&#125;</code></pre>
+
+    <p>
+      El elemento ocupa el 90% del espacio disponible,
+      pero nunca supera los 900 píxeles de anchura.
+      Los márgenes automáticos permiten centrarlo.
+    </p>
+
+    <h3>3.4. Imágenes adaptables</h3>
+
+    <p>
+      Una imagen demasiado grande puede sobresalir
+      de su contenedor. Podemos evitarlo con dos
+      propiedades muy sencillas.
+    </p>
+
+    <pre><code>img &#123;
+    max-width: 100%;
+    height: auto;
+&#125;</code></pre>
+
+    <p>
+      La imagen puede reducirse cuando no dispone de
+      suficiente espacio y conserva sus proporciones
+      originales gracias a height: auto.
+    </p>
+
+    <aside class="key">
+      El diseño responsive comienza utilizando elementos
+      flexibles. No siempre necesitamos media queries
+      para conseguir que un contenido se adapte.
+    </aside>
+
+  </section>
+
+  <!-- BREAKPOINTS -->
+
+  <section id="breakpoints">
+
+    <h2>4. ¿Qué es un breakpoint?</h2>
+
+    <p>
+      Un breakpoint, o punto de ruptura, es un ancho
+      a partir del cual decidimos modificar el diseño
+      de nuestra página web.
+    </p>
+
+    <p>
+      Por ejemplo, podemos establecer que nuestra página
+      tenga una apariencia para pantallas pequeñas
+      y otra para pantallas superiores a 768 píxeles.
+    </p>
+
+    <div class="breakpoint-diagram">
+
+      <div class="breakpoint-mobile">
+        <strong>Pantallas pequeñas</strong>
+        <span>Hasta 768 px</span>
+      </div>
+
+      <div class="breakpoint-desktop">
+        <strong>Pantallas grandes</strong>
+        <span>Más de 768 px</span>
+      </div>
+
+    </div>
+
+    <div class="breakpoint-caption">
+      Punto de ruptura: 768 px
+    </div>
+
+    <p>
+      Los breakpoints no son valores obligatorios.
+      Podemos elegir otros puntos de ruptura según
+      las necesidades del contenido de nuestra página.
+    </p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Ancho orientativo</th>
+            <th scope="col">Uso habitual</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>480 px</td>
+            <td>Pantallas pequeñas.</td>
+          </tr>
+          <tr>
+            <td>768 px</td>
+            <td>Transición hacia pantallas medianas.</td>
+          </tr>
+          <tr>
+            <td>1024 px</td>
+            <td>Pantallas de mayor tamaño.</td>
+          </tr>
+          <tr>
+            <td>1200 px</td>
+            <td>Escritorios amplios.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <aside class="key">
+      El navegador no necesita saber si estamos utilizando
+      un móvil o un ordenador. CSS puede adaptar el diseño
+      directamente al ancho de la ventana.
+    </aside>
+
+  </section>
+
+  <!-- ATRIBUTO MEDIA -->
+
+  <section id="media-html">
+
+    <span class="part-label">PRIMERA TÉCNICA</span>
+
+    <h2>5. Diferentes hojas de estilos: atributo media</h2>
+
+    <p>
+      Hasta ahora hemos enlazado una hoja de estilos
+      utilizando la etiqueta link dentro del head.
+    </p>
+
+    <pre><code>&lt;link rel="stylesheet" href="estilos.css"&gt;</code></pre>
+
+    <p>
+      Sin embargo, podemos añadir un atributo llamado
+      <code>media</code> que permite indicar bajo qué
+      condición queremos aplicar esa hoja de estilos.
+    </p>
+
+    <p>
+      De esta manera podemos crear un archivo CSS para
+      pantallas pequeñas y otro archivo para pantallas
+      grandes, sin modificar el contenido HTML.
+    </p>
+
+    <h3>5.1. Organización de los archivos</h3>
+
+    <pre><code>mi-proyecto/
+├── index.html
+├── escritorio.css
+└── movil.css</code></pre>
+
+    <div class="file-diagram">
+
+      <div class="file html-file">
+        <strong>index.html</strong>
+        <span>Contenido de la página</span>
+      </div>
+
+      <div class="file-connector" aria-hidden="true">
+        ↓
+      </div>
+
+      <div class="css-files">
+
+        <div class="file desktop-file">
+          <strong>escritorio.css</strong>
+          <span>Más de 768 px</span>
+        </div>
+
+        <div class="file mobile-file">
+          <strong>movil.css</strong>
+          <span>Hasta 768 px</span>
+        </div>
+
+      </div>
+    </div>
+
+    <h3>5.2. Enlazar las dos hojas de estilos</h3>
+
+    <pre><code>&lt;link rel="stylesheet"
+      href="escritorio.css"
+      media="(width > 768px)"&gt;
+
+&lt;link rel="stylesheet"
+      href="movil.css"
+      media="(max-width: 768px)"&gt;</code></pre>
+
+    <p>
+      La primera hoja se aplica cuando la ventana
+      tiene una anchura superior a 768 píxeles.
+    </p>
+
+    <p>
+      La segunda hoja se aplica cuando la anchura
+      es igual o inferior a 768 píxeles.
+    </p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Atributo</th>
+            <th scope="col">Función</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>rel</code></td>
+            <td>Indica que enlazamos una hoja de estilos.</td>
+          </tr>
+          <tr>
+            <td><code>href</code></td>
+            <td>Indica dónde está el archivo CSS.</td>
+          </tr>
+          <tr>
+            <td><code>media</code></td>
+            <td>Establece la condición de aplicación.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>5.3. Ejemplo práctico completo</h3>
+
+    <p>
+      Vamos a crear una página cuyo fondo, cabecera
+      y tamaño de texto cambien según el ancho de
+      la ventana del navegador.
+    </p>
+
+    <details class="extra-example" open>
+      <summary>Archivo index.html</summary>
+
+      <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="es"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+
+    &lt;meta name="viewport"
+          content="width=device-width, initial-scale=1.0"&gt;
+
+    &lt;title&gt;Diseño adaptable&lt;/title&gt;
+
+    &lt;link rel="stylesheet"
+          href="escritorio.css"
+          media="(width > 768px)"&gt;
+
+    &lt;link rel="stylesheet"
+          href="movil.css"
+          media="(max-width: 768px)"&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+
+    &lt;header&gt;
+        &lt;h1&gt;Mi página web&lt;/h1&gt;
+    &lt;/header&gt;
+
+    &lt;main&gt;
+        &lt;h2&gt;Bienvenidos&lt;/h2&gt;
+        &lt;p&gt;Esta página se adapta a diferentes pantallas.&lt;/p&gt;
+    &lt;/main&gt;
+
+    &lt;footer&gt;
+        &lt;p&gt;Mi página web&lt;/p&gt;
+    &lt;/footer&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    </details>
+
+    <details class="extra-example" open>
+      <summary>Archivo escritorio.css</summary>
+
+      <pre><code>body &#123;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: lightblue;
+&#125;
+
+header, footer &#123;
+    background-color: darkblue;
+    color: white;
+    text-align: center;
+    padding: 20px;
+&#125;
+
+main &#123;
+    width: 80%;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: white;
+    box-sizing: border-box;
+&#125;
+
+h1 &#123;
+    font-size: 36px;
+&#125;</code></pre>
+    </details>
+
+    <details class="extra-example" open>
+      <summary>Archivo movil.css</summary>
+
+      <pre><code>body &#123;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: lightyellow;
+&#125;
+
+header, footer &#123;
+    background-color: darkgreen;
+    color: white;
+    text-align: center;
+    padding: 10px;
+&#125;
+
+main &#123;
+    width: 95%;
+    margin: 15px auto;
+    padding: 10px;
+    background-color: white;
+    box-sizing: border-box;
+&#125;
+
+h1 &#123;
+    font-size: 24px;
+&#125;</code></pre>
+    </details>
+
+    <div class="example">
+
+      <h3>Comparación de los resultados</h3>
+
+      <div class="responsive-comparison">
+
+        <div>
+          <h4>Vista de escritorio</h4>
+          <p><code>escritorio.css</code></p>
+
+          <div class="preview-desktop">
+
+            <div class="preview-header">
+              Mi página web
+            </div>
+
+            <div class="preview-main">
+              <strong>Bienvenidos</strong>
+              <p>Esta página se adapta a diferentes pantallas.</p>
+            </div>
+
+            <div class="preview-footer">
+              Mi página web
+            </div>
+
+          </div>
+        </div>
+
+        <div>
+          <h4>Vista móvil</h4>
+          <p><code>movil.css</code></p>
+
+          <div class="preview-mobile">
+
+            <div class="preview-header">
+              Mi página web
+            </div>
+
+            <div class="preview-main">
+              <strong>Bienvenidos</strong>
+              <p>Esta página se adapta a diferentes pantallas.</p>
+            </div>
+
+            <div class="preview-footer">
+              Mi página web
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <h3>5.4. ¿Qué significan min-width y max-width?</h3>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Condición</th>
+            <th scope="col">Significado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>(min-width: 768px)</code></td>
+            <td>768 px o más.</td>
+          </tr>
+          <tr>
+            <td><code>(max-width: 768px)</code></td>
+            <td>768 px o menos.</td>
+          </tr>
+          <tr>
+            <td><code>(width &gt; 768px)</code></td>
+            <td>Más de 768 px.</td>
+          </tr>
+          <tr>
+            <td><code>(width &lt; 768px)</code></td>
+            <td>Menos de 768 px.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details class="extra-example">
+      <summary>
+        ¿Qué ocurre si las dos condiciones coinciden?
+      </summary>
+
+      <p>
+        Si utilizamos min-width: 768px en una hoja
+        y max-width: 768px en otra, ambas condiciones
+        se cumplen exactamente a 768 píxeles.
+      </p>
+
+      <p>
+        En ese caso se aplican ambas hojas de estilos.
+        Cuando existen declaraciones incompatibles,
+        CSS decide cuál prevalece mediante la cascada.
+      </p>
+
+      <p>
+        En nuestro ejemplo hemos utilizado width &gt; 768px
+        y max-width: 768px para evitar que las dos
+        condiciones coincidan.
+      </p>
+    </details>
+
+    <aside class="key">
+      <strong>Aplicación práctica.</strong>
+      Esta técnica permite resolver ejercicios en los
+      que se exige utilizar dos hojas de estilos
+      diferentes según el tamaño del navegador.
+    </aside>
+
+  </section>
+
+  <!-- MEDIA QUERIES DENTRO DE CSS -->
+
+  <section id="media-css">
+
+    <span class="part-label">SEGUNDA TÉCNICA</span>
+
+    <h2>6. Media queries dentro de una hoja de estilos</h2>
+
+    <p>
+      No es necesario crear diferentes archivos CSS
+      cada vez que queremos adaptar una página.
+      También podemos utilizar una única hoja de estilos
+      e introducir condiciones mediante la regla
+      <code>@media</code>.
+    </p>
+
+    <h3>6.1. Sintaxis</h3>
+
+    <pre><code>@media (condición) &#123;
+
+    selector &#123;
+        propiedad: valor;
+    &#125;
+
+&#125;</code></pre>
+
+    <p>
+      Dentro del bloque @media escribimos las reglas
+      CSS que queremos aplicar cuando se cumpla
+      la condición indicada.
+    </p>
+
+    <h3>6.2. Un ejemplo sencillo</h3>
+
+    <div class="code-grid">
+
+      <div>
+        <h4>HTML</h4>
+
+        <pre><code>&lt;link rel="stylesheet"
+      href="estilos.css"&gt;</code></pre>
+      </div>
+
+      <div>
+        <h4>CSS</h4>
+
+        <pre><code>body &#123;
+    background-color: lightblue;
+&#125;
+
+@media (max-width: 768px) &#123;
+
+    body &#123;
+        background-color: lightyellow;
+    &#125;
+
+&#125;</code></pre>
+      </div>
+
+    </div>
+
+    <p>
+      El fondo es azul claro de forma general.
+      Cuando la ventana tiene 768 píxeles o menos,
+      la regla incluida dentro de @media cambia
+      el fondo a amarillo claro.
+    </p>
+
+    <div class="result">
+      <h3>Demostración responsive real</h3>
+
+      <div class="real-responsive-demo">
+        <strong>Reduce el ancho del navegador</strong>
+
+        <p class="desktop-message">
+          Estás viendo los estilos para pantallas grandes.
+        </p>
+
+        <p class="mobile-message">
+          Estás viendo los estilos para pantallas pequeñas.
+        </p>
+      </div>
+
+      <p>
+        Esta demostración utiliza una media query real.
+        Reduce el ancho de la ventana por debajo de
+        768 píxeles para observar el cambio.
+      </p>
+    </div>
+
+    <h3>6.3. Podemos modificar varias propiedades</h3>
+
+    <pre><code>h1 &#123;
+    font-size: 36px;
+    color: darkblue;
+&#125;
+
+@media (max-width: 768px) &#123;
+
+    h1 &#123;
+        font-size: 24px;
+        color: darkgreen;
+    &#125;
+
+    main &#123;
+        width: 95%;
+    &#125;
+
+&#125;</code></pre>
+
+    <p>
+      Dentro de una media query podemos incluir tantas
+      reglas CSS como necesitemos.
+    </p>
+
+    <h3>6.4. Diferencia entre las dos técnicas</h3>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Característica</th>
+            <th scope="col">Atributo media</th>
+            <th scope="col">Regla @media</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Dónde se escribe</td>
+            <td>HTML</td>
+            <td>CSS</td>
+          </tr>
+          <tr>
+            <td>Qué condiciona</td>
+            <td>Una hoja de estilos</td>
+            <td>Un conjunto de reglas</td>
+          </tr>
+          <tr>
+            <td>Archivos necesarios</td>
+            <td>Varias hojas en nuestro ejemplo</td>
+            <td>Una hoja puede ser suficiente</td>
+          </tr>
+          <tr>
+            <td>Reutilización de estilos</td>
+            <td>Puede requerir estilos compartidos</td>
+            <td>Facilita mantener una base común</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <aside class="key">
+      Ambas técnicas utilizan media queries.
+      La diferencia está en dónde escribimos la condición
+      y qué conjunto de estilos queda condicionado.
+    </aside>
+
+  </section>
+
+  <!-- MOBILE FIRST -->
+
+  <section id="enfoques">
+
+    <h2>7. Mobile First y Desktop First</h2>
+
+    <p>
+      Cuando diseñamos una página responsive debemos
+      decidir desde qué tamaño de pantalla vamos
+      a comenzar nuestro diseño.
+    </p>
+
+    <div class="approach-grid">
+
+      <div class="approach-item">
+
+        <h3>Mobile First</h3>
+
+        <p>
+          Comenzamos diseñando para pantallas pequeñas.
+          Después añadimos estilos para pantallas
+          de mayor tamaño.
+        </p>
+
+        <pre><code>h1 &#123;
+    font-size: 24px;
+&#125;
+
+@media (min-width: 768px) &#123;
+
+    h1 &#123;
+        font-size: 36px;
+    &#125;
+
+&#125;</code></pre>
+
+        <p>
+          Primero móvil, después pantallas grandes.
+        </p>
+
+      </div>
+
+      <div class="approach-item">
+
+        <h3>Desktop First</h3>
+
+        <p>
+          Comenzamos diseñando para pantallas grandes.
+          Después modificamos los estilos para
+          pantallas más pequeñas.
+        </p>
+
+        <pre><code>h1 &#123;
+    font-size: 36px;
+&#125;
+
+@media (max-width: 768px) &#123;
+
+    h1 &#123;
+        font-size: 24px;
+    &#125;
+
+&#125;</code></pre>
+
+        <p>
+          Primero escritorio, después pantallas pequeñas.
+        </p>
+
+      </div>
+
+    </div>
+
+    <aside class="key">
+      Mobile First es un enfoque muy utilizado
+      en desarrollo web. Permite comenzar con un
+      diseño sencillo y ampliarlo cuando existe
+      más espacio disponible.
+    </aside>
+
+  </section>
+
+  <!-- COLUMNAS ADAPTABLES -->
+
+  <section id="columnas">
+
+    <h2>8. Crear columnas adaptables con Grid</h2>
+
+    <p>
+      Las media queries no solo permiten cambiar
+      colores o tamaños de letra. También podemos
+      modificar completamente la distribución
+      de los elementos.
+    </p>
+
+    <p>
+      Por ejemplo, podemos mostrar un catálogo
+      en una columna en móviles y en dos columnas
+      cuando existe suficiente espacio.
+    </p>
+
+    <div class="example">
+
+      <div class="code-grid">
+
+        <div>
+          <h3>HTML</h3>
+
+          <pre><code>&lt;section class="catalogo"&gt;
+
+    &lt;article&gt;Producto A&lt;/article&gt;
+
+    &lt;article&gt;Producto B&lt;/article&gt;
+
+    &lt;article&gt;Producto C&lt;/article&gt;
+
+    &lt;article&gt;Producto D&lt;/article&gt;
+
+&lt;/section&gt;</code></pre>
+        </div>
+
+        <div>
+          <h3>CSS</h3>
+
+          <pre><code>.catalogo &#123;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+&#125;
+
+@media (min-width: 768px) &#123;
+
+    .catalogo &#123;
+        grid-template-columns: repeat(2, 1fr);
+    &#125;
+
+&#125;</code></pre>
+        </div>
+
+      </div>
+
+      <div class="result">
+
+        <h3>Resultado responsive real</h3>
+
+        <div class="catalogo-demo">
+          <article>Producto A</article>
+          <article>Producto B</article>
+          <article>Producto C</article>
+          <article>Producto D</article>
+        </div>
+
+        <p>
+          Reduce el ancho de la ventana para comprobar
+          cómo el catálogo pasa de dos columnas a una.
+        </p>
+
+      </div>
+    </div>
+
+    <p>
+      Hemos utilizado Mobile First: primero declaramos
+      una columna y después añadimos dos columnas
+      cuando el ancho alcanza los 768 píxeles.
+    </p>
+
+    <details class="extra-example">
+      <summary>Ampliación: añadir una tercera columna</summary>
+
+      <p>
+        Podemos incorporar tantos puntos de ruptura
+        como necesitemos.
+      </p>
+
+      <pre><code>.catalogo &#123;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+&#125;
+
+@media (min-width: 768px) &#123;
+    .catalogo &#123;
+        grid-template-columns: repeat(2, 1fr);
+    &#125;
+&#125;
+
+@media (min-width: 1200px) &#123;
+    .catalogo &#123;
+        grid-template-columns: repeat(3, 1fr);
+    &#125;
+&#125;</code></pre>
+
+      <p>
+        Ahora el catálogo puede mostrar una, dos o tres
+        columnas según el espacio disponible.
+      </p>
+    </details>
+
+  </section>
+
+  <!-- COMPROBACIÓN -->
+
+  <section id="comprobacion">
+
+    <h2>9. ¿Cómo comprobar una página responsive?</h2>
+
+    <p>
+      No necesitamos disponer de varios dispositivos
+      para comenzar a comprobar nuestro diseño.
+      Los navegadores incluyen herramientas que
+      permiten simular diferentes tamaños de pantalla.
+    </p>
+
+    <ol class="verification-steps">
+
+      <li>Abre tu página web en Google Chrome o Microsoft Edge.</li>
+
+      <li>Pulsa F12 para abrir las herramientas de desarrollo.</li>
+
+      <li>Pulsa Ctrl + Shift + M para activar la vista de dispositivos.</li>
+
+      <li>Selecciona el modo Responsive.</li>
+
+      <li>Modifica manualmente el ancho de la pantalla.</li>
+
+      <li>Comprueba el diseño a 375, 768 y 1024 píxeles.</li>
+
+    </ol>
+
+    <h3>¿Qué debemos comprobar?</h3>
+
+    <ul>
+      <li>Que el texto pueda leerse cómodamente.</li>
+      <li>Que las imágenes no sobresalgan del contenedor.</li>
+      <li>Que no aparezca desplazamiento horizontal innecesario.</li>
+      <li>Que los enlaces y botones puedan pulsarse fácilmente.</li>
+      <li>Que las media queries se apliquen correctamente.</li>
+      <li>Que no desaparezca información importante.</li>
+    </ul>
+
+    <aside class="key">
+      Siempre que sea posible, realiza también una prueba
+      desde un teléfono móvil real. La simulación del
+      navegador es útil, pero no sustituye completamente
+      a las pruebas en dispositivos reales.
+    </aside>
+
+  </section>
+
+  <!-- ACTIVIDADES -->
+
+  <section id="practica" class="practice">
+
+    <h2>10. Actividades prácticas</h2>
+
+    <details class="extra-example" open>
+
+      <summary>Actividad 1. Dos hojas de estilos</summary>
+
+      <p>
+        Crea una página web sencilla que cambie
+        de apariencia cuando el ancho de la ventana
+        sea igual o inferior a 768 píxeles.
+      </p>
+
+      <ol>
+        <li>Crea un documento index.html.</li>
+        <li>Incluye la etiqueta meta viewport.</li>
+        <li>Añade una cabecera, contenido principal y pie de página.</li>
+        <li>Crea una hoja llamada escritorio.css.</li>
+        <li>Crea otra hoja llamada movil.css.</li>
+        <li>Utiliza el atributo media para enlazar los archivos.</li>
+        <li>Modifica los colores y tamaños en cada hoja.</li>
+        <li>Comprueba el resultado desde el navegador.</li>
+      </ol>
+
+      <details>
+        <summary>Ver orientación</summary>
+
+        <pre><code>&lt;link rel="stylesheet"
+      href="escritorio.css"
+      media="(width > 768px)"&gt;
+
+&lt;link rel="stylesheet"
+      href="movil.css"
+      media="(max-width: 768px)"&gt;</code></pre>
+
+        <p>
+          Recuerda que los tres archivos deben estar
+          correctamente enlazados y que cada hoja
+          debe incluir los estilos necesarios.
+        </p>
+      </details>
+
+    </details>
+
+    <details class="extra-example">
+
+      <summary>Actividad 2. Una única hoja de estilos</summary>
+
+      <p>
+        Repite el ejercicio anterior utilizando
+        solamente un archivo CSS.
+      </p>
+
+      <ol>
+        <li>Define los estilos generales de la página.</li>
+        <li>Utiliza @media para adaptar las pantallas pequeñas.</li>
+        <li>Cambia el fondo, el tamaño del título y los márgenes.</li>
+        <li>Comprueba que el resultado es equivalente.</li>
+      </ol>
+
+      <details>
+        <summary>Ver orientación</summary>
+
+        <pre><code>body &#123;
+    background-color: lightblue;
+&#125;
+
+h1 &#123;
+    font-size: 36px;
+&#125;
+
+@media (max-width: 768px) &#123;
+
+    body &#123;
+        background-color: lightyellow;
+    &#125;
+
+    h1 &#123;
+        font-size: 24px;
+    &#125;
+
+&#125;</code></pre>
+      </details>
+
+    </details>
+
+    <details class="extra-example">
+
+      <summary>Actividad 3. Catálogo responsive</summary>
+
+      <p>
+        Crea un catálogo de seis productos utilizando
+        CSS Grid.
+      </p>
+
+      <ul>
+        <li>Una columna en pantallas pequeñas.</li>
+        <li>Dos columnas a partir de 768 píxeles.</li>
+        <li>Tres columnas a partir de 1200 píxeles.</li>
+      </ul>
+
+      <details>
+        <summary>Ver orientación</summary>
+
+        <pre><code>.catalogo &#123;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+&#125;
+
+@media (min-width: 768px) &#123;
+    .catalogo &#123;
+        grid-template-columns: repeat(2, 1fr);
+    &#125;
+&#125;
+
+@media (min-width: 1200px) &#123;
+    .catalogo &#123;
+        grid-template-columns: repeat(3, 1fr);
+    &#125;
+&#125;</code></pre>
+      </details>
+
+    </details>
+
+  </section>
+
+  <!-- RESUMEN -->
+
+  <section class="final-summary">
+
+    <h2>11. Resumen del tema</h2>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Concepto</th>
+            <th scope="col">Para qué sirve</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>meta viewport</code></td>
+            <td>Configura la visualización en móviles.</td>
+          </tr>
+          <tr>
+            <td><code>width: 100%</code></td>
+            <td>Utiliza el ancho disponible del contenedor.</td>
+          </tr>
+          <tr>
+            <td><code>max-width</code></td>
+            <td>Limita la anchura máxima.</td>
+          </tr>
+          <tr>
+            <td><code>height: auto</code></td>
+            <td>Ayuda a conservar las proporciones de las imágenes.</td>
+          </tr>
+          <tr>
+            <td>Breakpoint</td>
+            <td>Punto a partir del cual cambia el diseño.</td>
+          </tr>
+          <tr>
+            <td><code>media</code></td>
+            <td>Condiciona una hoja de estilos enlazada desde HTML.</td>
+          </tr>
+          <tr>
+            <td><code>@media</code></td>
+            <td>Condiciona determinadas reglas CSS.</td>
+          </tr>
+          <tr>
+            <td><code>min-width</code></td>
+            <td>Establece una anchura mínima.</td>
+          </tr>
+          <tr>
+            <td><code>max-width</code></td>
+            <td>Establece una anchura máxima.</td>
+          </tr>
+          <tr>
+            <td>Mobile First</td>
+            <td>Diseña primero para pantallas pequeñas.</td>
+          </tr>
+          <tr>
+            <td>Desktop First</td>
+            <td>Diseña primero para pantallas grandes.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+
+  <!-- AUTOEVALUACIÓN -->
+
+  <section id="autoevaluacion">
+
+    <h2>12. Comprueba lo que has aprendido</h2>
+
+    <p>
+      Responde mentalmente a las preguntas antes
+      de desplegar sus soluciones.
+    </p>
+
+    <details class="extra-example">
+      <summary>
+        1. ¿Qué etiqueta HTML permite configurar la visualización móvil?
+      </summary>
+
+      <p>
+        La etiqueta meta viewport, situada dentro
+        del head del documento.
+      </p>
+    </details>
+
+    <details class="extra-example">
+      <summary>
+        2. ¿Qué propiedad impide que un elemento crezca demasiado?
+      </summary>
+
+      <p>
+        La propiedad max-width establece una
+        anchura máxima.
+      </p>
+    </details>
+
+    <details class="extra-example">
+      <summary>
+        3. ¿Qué atributo permite condicionar una hoja de estilos externa?
+      </summary>
+
+      <p>
+        El atributo media de la etiqueta link.
+      </p>
+    </details>
+
+    <details class="extra-example">
+      <summary>
+        4. ¿Qué regla permite aplicar estilos según el ancho desde CSS?
+      </summary>
+
+      <p>
+        La regla @media.
+      </p>
+    </details>
+
+    <details class="extra-example">
+      <summary>
+        5. ¿Qué significa max-width: 768px en una media query?
+      </summary>
+
+      <p>
+        Que la condición se cumple cuando el ancho
+        de la ventana es igual o inferior a 768 píxeles.
+      </p>
+    </details>
+
+    <details class="extra-example">
+      <summary>
+        6. ¿Qué enfoque comienza diseñando para pantallas pequeñas?
+      </summary>
+
+      <p>
+        Mobile First.
+      </p>
+    </details>
+
+    <details class="extra-example">
+      <summary>
+        7. ¿Es obligatorio utilizar siempre un breakpoint de 768px?
+      </summary>
+
+      <p>
+        No. Los puntos de ruptura deben elegirse
+        según las necesidades del contenido.
+      </p>
+    </details>
+
+  </section>
+
+  <TopicNav n={9} />
+
+</Base>
+
+<style>
+
+  /* Navegación y secciones */
+
+  section[id] {
+    scroll-margin-top: 2rem;
+  }
+
+  .part-label {
+    display: inline-block;
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    color: #6d3fa9;
+    margin-top: 1.5rem;
+  }
+
+  /* Comparación entre dispositivos */
+
+  .device-comparison {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    align-items: start;
+    margin-block: 2rem;
+  }
+
+  .device-example > strong {
+    display: block;
+    margin-bottom: .75rem;
+  }
+
+  .device-screen {
+    border: 5px solid #334155;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: white;
+    color: #1e293b;
+  }
+
+  .mock-header,
+  .mock-footer {
+    background-color: #6d3fa9;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .mock-content {
+    display: grid;
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .desktop-content {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .mobile-content {
+    grid-template-columns: 1fr;
+  }
+
+  .mock-content > div {
+    padding: 15px 8px;
+    background-color: #f2ebfa;
+    border: 1px solid #d8c4ee;
+    border-radius: 5px;
+    text-align: center;
+    font-size: .85rem;
+  }
+
+  /* Demostraciones de anchuras */
+
+  .width-preview {
+    max-width: 500px;
+    padding: 1rem;
+    overflow-x: auto;
+    border: 2px dashed #94a3b8;
+    margin-block: 1rem;
+  }
+
+  .width-preview > span {
+    display: block;
+    font-size: .8rem;
+    margin-bottom: .75rem;
+  }
+
+  .fixed-width-example,
+  .flexible-width-example {
+    box-sizing: border-box;
+    padding: 1rem;
+    border-radius: 4px;
+    background-color: #ede9fe;
+    color: #4c1d95;
+  }
+
+  .fixed-width-example {
+    width: 600px;
+  }
+
+  .flexible-width-example {
+    width: 100%;
+  }
+
+  /* Diagrama del breakpoint */
+
+  .breakpoint-diagram {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 2rem;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .breakpoint-mobile,
+  .breakpoint-desktop {
+    padding: 1.25rem;
+    text-align: center;
+    color: white;
+  }
+
+  .breakpoint-mobile {
+    background-color: #166534;
+  }
+
+  .breakpoint-desktop {
+    background-color: #1e40af;
+  }
+
+  .breakpoint-diagram span {
+    display: block;
+    margin-top: .4rem;
+    font-size: .9rem;
+  }
+
+  .breakpoint-caption {
+    text-align: center;
+    font-weight: 600;
+    padding: .75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Organización de archivos */
+
+  .file-diagram {
+    max-width: 650px;
+    margin: 2rem auto;
+    text-align: center;
+  }
+
+  .file {
+    padding: 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+  }
+
+  .file strong,
+  .file span {
+    display: block;
+  }
+
+  .file span {
+    font-size: .85rem;
+    margin-top: .5rem;
+  }
+
+  .html-file {
+    max-width: 280px;
+    margin: auto;
+    background-color: #ffedd5;
+    color: #9a3412;
+  }
+
+  .file-connector {
+    padding: .5rem;
+    font-size: 1.8rem;
+  }
+
+  .css-files {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .desktop-file {
+    background-color: #dbeafe;
+    color: #1e40af;
+  }
+
+  .mobile-file {
+    background-color: #dcfce7;
+    color: #166534;
+  }
+
+  /* Comparación de páginas */
+
+  .responsive-comparison {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    align-items: start;
+    gap: 1.5rem;
+  }
+
+  .responsive-comparison > div {
+    min-width: 0;
+  }
+
+  .preview-desktop,
+  .preview-mobile {
+    overflow: hidden;
+    border: 1px solid #94a3b8;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+  }
+
+  .preview-desktop {
+    background-color: lightblue;
+  }
+
+  .preview-mobile {
+    background-color: lightyellow;
+    max-width: 260px;
+    margin-inline: auto;
+  }
+
+  .preview-header,
+  .preview-footer {
+    text-align: center;
+    color: white;
+  }
+
+  .preview-desktop .preview-header,
+  .preview-desktop .preview-footer {
+    background-color: darkblue;
+    padding: 15px;
+  }
+
+  .preview-mobile .preview-header,
+  .preview-mobile .preview-footer {
+    background-color: darkgreen;
+    padding: 8px;
+  }
+
+  .preview-desktop .preview-header {
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+
+  .preview-mobile .preview-header {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  .preview-main {
+    background-color: white;
+    color: #1f2937;
+    box-sizing: border-box;
+  }
+
+  .preview-main p {
+    font-size: .85rem;
+  }
+
+  .preview-desktop .preview-main {
+    width: 80%;
+    margin: 20px auto;
+    padding: 15px;
+  }
+
+  .preview-mobile .preview-main {
+    width: 95%;
+    margin: 10px auto;
+    padding: 8px;
+  }
+
+  .preview-footer {
+    font-size: .8rem;
+  }
+
+  /* Demostración con una media query real */
+
+  .real-responsive-demo {
+    background-color: lightblue;
+    color: #1e3a5f;
+    padding: 2rem;
+    border-radius: 8px;
+    border: 2px solid #1e40af;
+    margin-block: 1rem;
+  }
+
+  .mobile-message {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+
+    .real-responsive-demo {
+      background-color: lightyellow;
+      color: #14532d;
+      border-color: darkgreen;
+      padding: 1rem;
+    }
+
+    .desktop-message {
+      display: none;
+    }
+
+    .mobile-message {
+      display: block;
+    }
+
+  }
+
+  /* Mobile First y Desktop First */
+
+  .approach-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-block: 1.5rem;
+  }
+
+  .approach-item {
+    border: 1px solid #d8d3e1;
+    border-radius: 8px;
+    padding: 1rem;
+    min-width: 0;
+  }
+
+  /* Ejemplo real de Grid */
+
+  .catalogo-demo {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-block: 1rem;
+  }
+
+  .catalogo-demo article {
+    background-color: #f2ebfa;
+    color: #4c1d95;
+    border: 1px solid #d8c4ee;
+    padding: 2rem 1rem;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  @media (min-width: 768px) {
+
+    .catalogo-demo {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+  }
+
+  /* Desplegables */
+
+  .extra-example {
+    border: 1px solid #d8d3e1;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-block: 1rem;
+  }
+
+  summary {
+    cursor: pointer;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  summary:focus-visible {
+    outline: 3px solid #6d3fa9;
+    outline-offset: 4px;
+  }
+
+  details[open] > summary {
+    margin-bottom: 1rem;
+  }
+
+  details details {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-left: 3px solid #6d3fa9;
+  }
+
+  /* Tablas y código */
+
+  .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin-block: 1rem;
+  }
+
+  pre {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .code-grid > div {
+    min-width: 0;
+  }
+
+  .verification-steps li {
+    margin-bottom: .75rem;
+  }
+
+  /* Resumen */
+
+  .final-summary {
+    margin-block: 2rem;
+    padding: 1.5rem;
+    border: 1px solid #d8d3e1;
+    border-left: 4px solid #6d3fa9;
+    border-radius: 8px;
+  }
+
+  .final-summary h2 {
+    margin-top: 0;
+  }
+
+  /* Adaptación del propio manual */
+
+  @media (max-width: 640px) {
+
+    .device-comparison,
+    .responsive-comparison,
+    .approach-grid,
+    .code-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .desktop-content {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .mobile-example {
+      max-width: 220px;
+      width: 100%;
+      margin-inline: auto;
+    }
+
+    .breakpoint-mobile,
+    .breakpoint-desktop {
+      padding: .75rem;
+      font-size: .85rem;
+    }
+
+    .css-files {
+      gap: .5rem;
+    }
+
+    .file {
+      padding: .75rem;
+      overflow-wrap: anywhere;
+    }
+
+    .extra-example,
+    .approach-item,
+    .final-summary {
+      padding: .85rem;
+    }
+
+  }
+
+</style>
